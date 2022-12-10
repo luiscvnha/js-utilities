@@ -4,8 +4,7 @@ export function isNullish(value: unknown): value is null | undefined {
 
 export function isNullishOrEmpty(value: unknown): value is null | undefined | '' | [] {
   return value === null || value === undefined || (
-    (typeof value === 'string' || (typeof value === 'object' && Array.isArray(value))) &&
-    (value.length <= 0)
+    (typeof value === 'string' || Array.isArray(value)) && value.length <= 0
   );
 }
 
