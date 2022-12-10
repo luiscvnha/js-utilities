@@ -15,16 +15,11 @@ $ npm run test
 ## Utilities
 
 ### Promises
-JavaScript's `Promise` object:
-```ts
-const p = new Promise<number>((resolve, reject) => {
-  resolve(42);
-});
-
-p.then((v) => { /* ... */ });
-```
-
 1. [DeferredPromise](/src/promises/deferred-promise.ts)
+
+    A Promise that can be instantiated without any arguments.
+    Is resolved or rejected using the `.resolve()` or `.reject()` methods respectively.
+    Has the `state`, `isFulfilled`, `isRejected` and `isSettled` properties.
 
     ```ts
     const dp = new DeferredPromise<number>();
@@ -37,6 +32,10 @@ p.then((v) => { /* ... */ });
     ```
 
 1. [ExecutablePromise](/src/promises/executable-promise.ts)
+
+    A Promise that can be instantiated without any arguments.
+    Is executed using the `.execute()` method.
+    Has the `state`, `isFulfilled`, `isRejected` and `isSettled` properties.
 
     ```ts
     const ep = new ExecutablePromise<number>();
