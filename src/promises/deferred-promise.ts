@@ -30,29 +30,29 @@ export class DeferredPromise<T> extends BasePromise<T> {
     this._state = PromiseState.pending;
   }
 
-  public resolve(value: T | PromiseLike<T>): void {
-    if (this.isSettled) {
-      return;
+  public resolve(value: T | PromiseLike<T>): DeferredPromise<T> {
+    if (!this.isSettled) {
+      this._resolve!(value);
+
+      this._resolve = undefined;
+      this._reject = undefined;
+
+      this._state = PromiseState.fulfilled;
     }
 
-    this._resolve!(value);
-
-    this._resolve = undefined;
-    this._reject = undefined;
-
-    this._state = PromiseState.fulfilled;
+    return this;
   }
 
-  public reject(reason?: any): void {
-    if (this.isSettled) {
-      return;
+  public reject(reason?: any): DeferredPromise<T> {
+    if (!this.isSettled) {
+      this._reject!(reason);
+
+      this._resolve = undefined;
+      this._reject = undefined;
+
+      this._state = PromiseState.rejected;
     }
 
-    this._reject!(reason);
-
-    this._resolve = undefined;
-    this._reject = undefined;
-
-    this._state = PromiseState.rejected;
+    return this;
   }
 }
