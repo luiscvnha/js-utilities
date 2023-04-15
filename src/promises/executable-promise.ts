@@ -1,15 +1,15 @@
-import { BasePromise } from './base-promise';
-import { PromiseState } from './promise-state';
+import { PromiseExecutor, PromiseRejectFunc, PromiseResolveFunc, PromiseState } from "./types";
+import { BasePromise } from "./base-promise";
 
 
-export class ExecutablePromise<T> extends BasePromise<T> {
-  private _resolve: ((value: T | PromiseLike<T>) => void) | undefined;
-  private _reject: ((reason?: any) => void) | undefined;
+export class ExecutablePromise<T = void> extends BasePromise<T> {
+  private _resolve: PromiseResolveFunc<T> | undefined;
+  private _reject: PromiseRejectFunc | undefined;
   private _executed: boolean;
-  protected _state: PromiseState;
+
 
   public get [Symbol.toStringTag](): string {
-    return 'ExecutablePromise';
+    return "ExecutablePromise";
   }
 
   public static get [Symbol.species](): PromiseConstructor {
@@ -18,29 +18,22 @@ export class ExecutablePromise<T> extends BasePromise<T> {
 
 
   public constructor() {
-    let _resolve: (value: T | PromiseLike<T>) => void;
-    let _reject: (reason?: any) => void;
-
     super((resolve, reject) => {
-      _resolve = resolve;
-      _reject = reject;
+      this._resolve = resolve;
+      this._reject = reject;
     });
 
-    this._resolve = _resolve!;
-    this._reject = _reject!;
     this._executed = false;
-    this._state = PromiseState.pending;
   }
 
-  public execute(
-    executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void
-  ): ExecutablePromise<T> {
 
+  public execute(executor: PromiseExecutor<T>): ExecutablePromise<T> {
     if (this._executed) {
       throw new Error(`Cannot execute ${this[Symbol.toStringTag]} more than once`);
     }
 
-    const resolve = (value: T | PromiseLike<T>): void => {
+
+    const resolveFunc: PromiseResolveFunc<T> = (value) => {
       this._resolve!(value);
 
       this._resolve = undefined;
@@ -49,7 +42,7 @@ export class ExecutablePromise<T> extends BasePromise<T> {
       this._state = PromiseState.fulfilled;
     };
 
-    const reject = (reason?: any): void => {
+    const rejectFunc: PromiseRejectFunc = (reason) => {
       this._reject!(reason);
 
       this._resolve = undefined;
@@ -58,12 +51,14 @@ export class ExecutablePromise<T> extends BasePromise<T> {
       this._state = PromiseState.rejected;
     };
 
+
     try {
-      executor(resolve, reject);
+      executor(resolveFunc, rejectFunc);
     }
     catch (error) {
-      reject(error);
+      rejectFunc(error);
     }
+
 
     this._executed = true;
 

@@ -1,8 +1,8 @@
-import { PromiseState } from './promise-state';
+import { PromiseExecutor, PromiseState } from "./types";
 
 
 export abstract class BasePromise<T> extends Promise<T> {
-  protected abstract _state: PromiseState;
+  protected _state: PromiseState;
 
 
   public abstract get [Symbol.toStringTag](): string;
@@ -12,13 +12,18 @@ export abstract class BasePromise<T> extends Promise<T> {
   }
 
 
-  protected constructor(executor: (resolve: (value: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
+  protected constructor(executor: PromiseExecutor<T>) {
     super(executor);
+    this._state = PromiseState.pending;
   }
 
 
   public get state(): PromiseState {
     return this._state;
+  }
+
+  public get isPending(): boolean {
+    return this._state === PromiseState.pending;
   }
 
   public get isFulfilled(): boolean {

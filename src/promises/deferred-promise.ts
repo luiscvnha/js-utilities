@@ -1,14 +1,14 @@
-import { BasePromise } from './base-promise';
-import { PromiseState } from './promise-state';
+import { PromiseRejectFunc, PromiseResolveFunc, PromiseState } from "./types";
+import { BasePromise } from "./base-promise";
 
 
-export class DeferredPromise<T> extends BasePromise<T> {
-  private _resolve: ((value: T | PromiseLike<T>) => void) | undefined;
-  private _reject: ((reason?: any) => void) | undefined;
-  protected _state: PromiseState;
+export class DeferredPromise<T = void> extends BasePromise<T> {
+  private _resolve: PromiseResolveFunc<T> | undefined;
+  private _reject: PromiseRejectFunc | undefined;
+
 
   public get [Symbol.toStringTag](): string {
-    return 'DeferredPromise';
+    return "DeferredPromise";
   }
 
   public static get [Symbol.species](): PromiseConstructor {
@@ -17,18 +17,12 @@ export class DeferredPromise<T> extends BasePromise<T> {
 
 
   public constructor() {
-    let _resolve: (value: T | PromiseLike<T>) => void;
-    let _reject: (reason?: any) => void;
-
     super((resolve, reject) => {
-      _resolve = resolve;
-      _reject = reject;
+      this._resolve = resolve;
+      this._reject = reject;
     });
-
-    this._resolve = _resolve!;
-    this._reject = _reject!;
-    this._state = PromiseState.pending;
   }
+
 
   public resolve(value: T | PromiseLike<T>): DeferredPromise<T> {
     if (!this.isSettled) {
