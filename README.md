@@ -16,4 +16,4 @@ $ npm run test
 
 ## Docs
 
-[Wiki page](https://github.com/luiscvnha/js-utilities/wiki)
+[Wiki](https://github.com/luiscvnha/js-utilities/wiki)
