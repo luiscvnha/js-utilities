@@ -1,5 +1,6 @@
 {
   "env": {
+    "browser": true,
     "es2021": true
   },
   "extends": [
@@ -18,7 +19,7 @@
     "linebreak-style": ["error", "unix"],
     "semi": ["error", "always"],
     "indent": ["warn", 2],
-    "quotes": ["warn", "single"],
+    "quotes": ["warn", "double"],
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-explicit-any": "off",
