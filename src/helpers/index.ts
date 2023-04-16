@@ -52,3 +52,12 @@ export function isClickOnScrollbar(click: MouseEvent): boolean {
 
   return offsetTop >= horizontalScrollbarTop && offsetTop < horizontalScrollbarBottom;
 }
+
+
+export function delay(callback: () => void, ms: number): () => void {
+  let timeoutId: number = 0;
+  return function() {
+    window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(callback, ms);
+  };
+}
