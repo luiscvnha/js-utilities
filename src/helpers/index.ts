@@ -54,7 +54,7 @@ export function isClickOnScrollbar(click: MouseEvent): boolean {
 }
 
 
-export function delay(callback: () => void, ms: number): () => void {
+export function delayed(callback: () => void, ms: number): () => void {
   let timeoutId: number = 0;
   return function() {
     window.clearTimeout(timeoutId);
