@@ -1,7 +1,7 @@
 import { PromiseExecutor, PromiseState } from "./types";
 
 
-export abstract class BasePromise<T> extends Promise<T> {
+export abstract class BaseXPromise<T> extends Promise<T> {
   protected _state: PromiseState;
 
 

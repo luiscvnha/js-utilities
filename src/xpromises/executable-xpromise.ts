@@ -1,19 +1,19 @@
 import { PromiseExecutor, PromiseRejectFunc, PromiseResolveFunc, PromiseState } from "./types";
-import { BasePromise } from "./base-promise";
+import { BaseXPromise } from "./base-xpromise";
 
 
-export class ExecutablePromise<T = void> extends BasePromise<T> {
+export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
   private _resolve: PromiseResolveFunc<T> | undefined;
   private _reject: PromiseRejectFunc | undefined;
   private _executed: boolean;
 
 
   public get [Symbol.toStringTag](): string {
-    return "ExecutablePromise";
+    return "ExecutableXPromise";
   }
 
   public static get [Symbol.species](): PromiseConstructor {
-    return BasePromise[Symbol.species];
+    return BaseXPromise[Symbol.species];
   }
 
 
@@ -27,7 +27,7 @@ export class ExecutablePromise<T = void> extends BasePromise<T> {
   }
 
 
-  public execute(executor: PromiseExecutor<T>): ExecutablePromise<T> {
+  public execute(executor: PromiseExecutor<T>): ExecutableXPromise<T> {
     if (this._executed) {
       throw new Error(`Cannot execute ${this[Symbol.toStringTag]} more than once`);
     }
