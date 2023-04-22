@@ -18,7 +18,7 @@
   "rules": {
     "linebreak-style": ["error", "unix"],
     "semi": ["error", "always"],
-    "indent": ["warn", 2],
+    "indent": ["warn", 2, { "SwitchCase": 1 }],
     "quotes": ["warn", "double"],
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "off",
@@ -26,5 +26,6 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/explicit-member-accessibility": "error"
-  }
+  },
+  "ignorePatterns": ["dist/**/*"]
 }
