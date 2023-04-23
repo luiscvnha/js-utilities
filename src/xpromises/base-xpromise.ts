@@ -1,7 +1,7 @@
-import { PromiseExecutor, PromiseState } from "./types";
+import { PromiseExecutor, PromiseState, IXPromise } from "./types";
 
 
-export abstract class BaseXPromise<T> extends Promise<T> {
+export abstract class BaseXPromise<T> extends Promise<T> implements IXPromise<T> {
   protected _state: PromiseState;
 
 
