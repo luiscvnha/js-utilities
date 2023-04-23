@@ -6,6 +6,7 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
   private _resolve: PromiseResolveFunc<T> | undefined;
   private _reject: PromiseRejectFunc | undefined;
   private _executed: boolean;
+  protected _state: PromiseState;
 
 
   public get [Symbol.toStringTag](): string {
@@ -24,6 +25,7 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
     });
 
     this._executed = false;
+    this._state = PromiseState.pending;
   }
 
 

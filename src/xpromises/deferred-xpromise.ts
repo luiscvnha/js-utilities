@@ -5,6 +5,7 @@ import { BaseXPromise } from "./base-xpromise";
 export class DeferredXPromise<T = void> extends BaseXPromise<T> {
   private _resolve: PromiseResolveFunc<T> | undefined;
   private _reject: PromiseRejectFunc | undefined;
+  protected _state: PromiseState;
 
 
   public get [Symbol.toStringTag](): string {
@@ -21,6 +22,8 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
       this._resolve = resolve;
       this._reject = reject;
     });
+
+    this._state = PromiseState.pending;
   }
 
 

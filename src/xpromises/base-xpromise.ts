@@ -2,7 +2,7 @@ import { PromiseExecutor, PromiseState, IXPromise } from "./types";
 
 
 export abstract class BaseXPromise<T> extends Promise<T> implements IXPromise<T> {
-  protected _state: PromiseState;
+  protected abstract _state: PromiseState;
 
 
   public abstract get [Symbol.toStringTag](): string;
@@ -14,7 +14,6 @@ export abstract class BaseXPromise<T> extends Promise<T> implements IXPromise<T>
 
   protected constructor(executor: PromiseExecutor<T>) {
     super(executor);
-    this._state = PromiseState.pending;
   }
 
 
