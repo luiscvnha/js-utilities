@@ -18,10 +18,16 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
 
 
   public constructor() {
+    let resolveTmp: PromiseResolveFunc<T> | undefined;
+    let rejectTmp: PromiseRejectFunc | undefined;
+
     super((resolve, reject) => {
-      this._resolve = resolve;
-      this._reject = reject;
+      resolveTmp = resolve;
+      rejectTmp = reject;
     });
+
+    this._resolve = resolveTmp;
+    this._reject = rejectTmp;
 
     this._state = PromiseState.pending;
   }
