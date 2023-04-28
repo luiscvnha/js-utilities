@@ -16,7 +16,7 @@ export class XPromise<T = void> extends BaseXPromise<T> {
 
 
   public constructor(executor: PromiseExecutor<T>) {
-    let state: PromiseState | null = null;
+    let state: PromiseState | undefined;
 
     super((resolve, reject) => {
       executor(
