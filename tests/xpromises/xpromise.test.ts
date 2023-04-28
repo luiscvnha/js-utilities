@@ -2,15 +2,15 @@ import { PromiseState } from "../../src/xpromises/types";
 import { XPromise } from "../../src/xpromises/xpromise";
 
 
-describe("testing XPromise", () => {
+describe("Testing XPromise", () => {
 
-  test("state when unsettled", () => {
+  test("State when unsettled", () => {
     const p = new XPromise(() => {});
 
     expect(p.state).toBe(PromiseState.pending);
   });
 
-  test("state when resolving synchronously", () => {
+  test("State when resolving synchronously", () => {
     const p = new XPromise((resolve) => {
       resolve();
     });
@@ -22,7 +22,7 @@ describe("testing XPromise", () => {
     });
   });
 
-  test("state when rejecting synchronously", () => {
+  test("State when rejecting synchronously", () => {
     const p = new XPromise((resolve, reject) => {
       reject();
     });
@@ -34,7 +34,7 @@ describe("testing XPromise", () => {
     });
   });
 
-  test("state when resolving asynchronously", () => {
+  test("State when resolving asynchronously", () => {
     const p = new XPromise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -48,7 +48,7 @@ describe("testing XPromise", () => {
     });
   });
 
-  test("state when rejecting asynchronously", () => {
+  test("State when rejecting asynchronously", () => {
     const p = new XPromise((resolve, reject) => {
       setTimeout(() => {
         reject();

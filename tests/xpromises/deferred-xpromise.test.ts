@@ -2,15 +2,15 @@ import { PromiseState } from "../../src/xpromises/types";
 import { DeferredXPromise } from "../../src/xpromises/deferred-xpromise";
 
 
-describe("testing DeferredXPromise", () => {
+describe("Testing DeferredXPromise", () => {
 
-  test("state when unsettled", () => {
+  test("State when unsettled", () => {
     const p = new DeferredXPromise();
 
     expect(p.state).toBe(PromiseState.pending);
   });
 
-  test("state when resolving synchronously", () => {
+  test("State when resolving synchronously", () => {
     const p = new DeferredXPromise();
     p.resolve();
 
@@ -21,7 +21,7 @@ describe("testing DeferredXPromise", () => {
     });
   });
 
-  test("state when rejecting synchronously", () => {
+  test("State when rejecting synchronously", () => {
     const p = new DeferredXPromise();
     p.reject();
 
@@ -32,7 +32,7 @@ describe("testing DeferredXPromise", () => {
     });
   });
 
-  test("state when resolving asynchronously", () => {
+  test("State when resolving asynchronously", () => {
     const p = new DeferredXPromise();
     setTimeout(() => {
       p.resolve();
@@ -45,7 +45,7 @@ describe("testing DeferredXPromise", () => {
     });
   });
 
-  test("state when rejecting asynchronously", () => {
+  test("State when rejecting asynchronously", () => {
     const p = new DeferredXPromise();
     setTimeout(() => {
       p.reject();
