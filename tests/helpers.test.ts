@@ -4,7 +4,7 @@ import {
   isNullishOrWhitespace,
   typeOf,
   sameValueZero
-} from "../../src/helpers";
+} from "../src/helpers";
 
 
 describe("Testing helpers", () => {
