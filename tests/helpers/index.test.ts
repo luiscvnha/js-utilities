@@ -6,7 +6,7 @@ import {
 } from "../../src/helpers";
 
 
-describe("testing helpers", () => {
+describe("Testing helpers", () => {
 
   test("isNullish", () => {
     expect(isNullish(null)).toBe(true);
@@ -39,6 +39,7 @@ describe("testing helpers", () => {
     expect(isNullishOrEmpty(undefined)).toBe(true);
     expect(isNullishOrEmpty("")).toBe(true);
     expect(isNullishOrEmpty([])).toBe(true);
+    expect(isNullishOrEmpty({ length: 0 })).toBe(true);
 
     expect(isNullishOrEmpty(" ")).toBe(false);
     expect(isNullishOrEmpty([1])).toBe(false);
