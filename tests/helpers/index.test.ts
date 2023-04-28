@@ -2,7 +2,8 @@ import {
   isNullish,
   isNullishOrEmpty,
   isNullishOrWhitespace,
-  typeOf
+  typeOf,
+  sameValueZero
 } from "../../src/helpers";
 
 
@@ -119,6 +120,36 @@ describe("Testing helpers", () => {
     expect(typeOf(new Array<any>())).toBe("array");
     expect(typeOf(new Map<any, any>())).toBe("map");
     expect(typeOf(new Set<any>())).toBe("set");
+  });
+
+  test("sameValueZero", () => {
+    expect(sameValueZero(undefined, undefined)).toBe(true);
+    expect(sameValueZero(null, null)).toBe(true);
+    expect(sameValueZero(true, true)).toBe(true);
+    expect(sameValueZero(false, false)).toBe(true);
+    expect(sameValueZero("foo", "foo")).toBe(true);
+    expect(sameValueZero(0, 0)).toBe(true);
+    expect(sameValueZero(+0, -0)).toBe(true);
+    expect(sameValueZero(+0, 0)).toBe(true);
+    expect(sameValueZero(-0, 0)).toBe(true);
+    expect(sameValueZero(0n, -0n)).toBe(true);
+    expect(sameValueZero(NaN, NaN)).toBe(true);
+
+    expect(sameValueZero(0, false)).toBe(false);
+    expect(sameValueZero("", false)).toBe(false);
+    expect(sameValueZero("", 0)).toBe(false);
+    expect(sameValueZero("0", 0)).toBe(false);
+    expect(sameValueZero("17", 17)).toBe(false);
+    expect(sameValueZero([1, 2], "1,2")).toBe(false);
+    expect(sameValueZero(new String("foo"), "foo")).toBe(false);
+    expect(sameValueZero(null, undefined)).toBe(false);
+    expect(sameValueZero(null, false)).toBe(false);
+    expect(sameValueZero(undefined, false)).toBe(false);
+    expect(sameValueZero({ foo: "bar" }, { foo: "bar" })).toBe(false);
+    expect(sameValueZero(new String("foo"), new String("foo"))).toBe(false);
+    expect(sameValueZero(0, null)).toBe(false);
+    expect(sameValueZero(0, NaN)).toBe(false);
+    expect(sameValueZero("foo", NaN)).toBe(false);
   });
 
 });

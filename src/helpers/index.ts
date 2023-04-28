@@ -61,3 +61,11 @@ export function delayed(callback: () => void, ms: number): () => void {
     timeoutId = window.setTimeout(callback, ms);
   };
 }
+
+
+export function sameValueZero(x: any, y: any): boolean {
+  if (typeof x === "number" && typeof y === "number") {
+    return x === y || (x !== x && y !== y);
+  }
+  return x === y;
+}
