@@ -1,5 +1,4 @@
-import { PromiseState } from "../../src/xpromises/types";
-import { XPromise } from "../../src/xpromises/xpromise";
+import { PromiseState, XPromise } from "../../src/xpromises";
 
 
 describe("Testing XPromise", () => {

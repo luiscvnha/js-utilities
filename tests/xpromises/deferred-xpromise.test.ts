@@ -1,5 +1,4 @@
-import { PromiseState } from "../../src/xpromises/types";
-import { DeferredXPromise } from "../../src/xpromises/deferred-xpromise";
+import { PromiseState, DeferredXPromise } from "../../src/xpromises";
 
 
 describe("Testing DeferredXPromise", () => {

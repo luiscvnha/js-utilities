@@ -1,5 +1,4 @@
-import { PromiseState } from "../../src/xpromises/types";
-import { ExecutableXPromise } from "../../src/xpromises/executable-xpromise";
+import { PromiseState, ExecutableXPromise } from "../../src/xpromises";
 
 
 describe("Testing ExecutableXPromise", () => {
