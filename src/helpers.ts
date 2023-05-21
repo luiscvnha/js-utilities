@@ -17,6 +17,40 @@ export function isNullishOrWhitespace(value: any): value is null | undefined | "
 }
 
 
+export function isIterable(value: any): value is Iterable<any> {
+  return !isNullish(value) && typeof value[Symbol.iterator] === "function";
+}
+
+
+export function isAsyncIterable(value: any): value is AsyncIterable<any> {
+  return !isNullish(value) && typeof value[Symbol.asyncIterator] === "function";
+}
+
+
+export function isArrayLike(value: any): value is ArrayLike<any> {
+  return (
+    Array.isArray(value) ||
+    typeof value === "string" ||
+    (Boolean(value) &&
+      typeof value === "object" &&
+      typeof (value.length) === "number" &&
+      (value.length === 0 ||
+        (value.length > 0 &&
+        (value.length - 1) in value)
+      )
+    )
+  );
+}
+
+
+export function sameValueZero(x: any, y: any): boolean {
+  if (typeof x === "number" && typeof y === "number") {
+    return x === y || (x !== x && y !== y);
+  }
+  return x === y;
+}
+
+
 export function typeOf(value: any): string {
   const match = Object.prototype.toString.call(value).match(/\s([a-zA-Z0-9_$]+)/);
   if (isNullish(match) || isNullish(match[1])) { throw new TypeError(); }
@@ -60,12 +94,4 @@ export function delayed(callback: () => void, ms: number): () => void {
     window.clearTimeout(timeoutId);
     timeoutId = window.setTimeout(callback, ms);
   };
-}
-
-
-export function sameValueZero(x: any, y: any): boolean {
-  if (typeof x === "number" && typeof y === "number") {
-    return x === y || (x !== x && y !== y);
-  }
-  return x === y;
 }
