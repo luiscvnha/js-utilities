@@ -7,8 +7,8 @@ import {
   isArrayLike,
   isIterable,
   isAsyncIterable
-} from "../src/helpers";
-import { List } from "../src/list";
+} from "../../src/helpers";
+import { List } from "../../src/list";
 
 
 describe("Testing helpers", () => {
