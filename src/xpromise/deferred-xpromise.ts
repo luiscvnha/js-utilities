@@ -1,10 +1,10 @@
-import { PromiseRejectFn, PromiseResolveFn, PromiseState } from "./types";
+import { PromiseRejector, PromiseResolver, PromiseState } from "./types";
 import { BaseXPromise } from "./base-xpromise";
 
 
 export class DeferredXPromise<T = void> extends BaseXPromise<T> {
-  private _resolve: PromiseResolveFn<T> | undefined;
-  private _reject: PromiseRejectFn | undefined;
+  private _resolve: PromiseResolver<T> | undefined;
+  private _reject: PromiseRejector | undefined;
   protected _state: PromiseState;
 
 
@@ -18,8 +18,8 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
 
 
   public constructor() {
-    let resolveTmp: PromiseResolveFn<T> | undefined;
-    let rejectTmp: PromiseRejectFn | undefined;
+    let resolveTmp: PromiseResolver<T> | undefined;
+    let rejectTmp: PromiseRejector | undefined;
 
     super((resolve, reject) => {
       resolveTmp = resolve;

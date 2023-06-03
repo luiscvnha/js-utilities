@@ -1,8 +1,8 @@
-export type PromiseResolveFn<T> = (value: T | PromiseLike<T>) => void;
+export type PromiseResolver<T> = (value: T | PromiseLike<T>) => void;
 
-export type PromiseRejectFn = (reason?: any) => void;
+export type PromiseRejector = (reason?: any) => void;
 
-export type PromiseExecutor<T> = (resolve: PromiseResolveFn<T>, reject: PromiseRejectFn) => void;
+export type PromiseExecutor<T> = (resolve: PromiseResolver<T>, reject: PromiseRejector) => void;
 
 export enum PromiseState {
   pending,   // initial state, neither fulfilled nor rejected.

@@ -1,10 +1,10 @@
-import { PromiseExecutor, PromiseRejectFn, PromiseResolveFn, PromiseState } from "./types";
+import { PromiseExecutor, PromiseRejector, PromiseResolver, PromiseState } from "./types";
 import { BaseXPromise } from "./base-xpromise";
 
 
 export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
-  private _resolve: PromiseResolveFn<T> | undefined;
-  private _reject: PromiseRejectFn | undefined;
+  private _resolve: PromiseResolver<T> | undefined;
+  private _reject: PromiseRejector | undefined;
   private _executed: boolean;
   protected _state: PromiseState;
 
@@ -19,8 +19,8 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
 
 
   public constructor() {
-    let resolveTmp: PromiseResolveFn<T> | undefined;
-    let rejectTmp: PromiseRejectFn | undefined;
+    let resolveTmp: PromiseResolver<T> | undefined;
+    let rejectTmp: PromiseRejector | undefined;
 
     super((resolve, reject) => {
       resolveTmp = resolve;
@@ -41,7 +41,7 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
     }
 
 
-    const resolveFn: PromiseResolveFn<T> = (value) => {
+    const resolveFn: PromiseResolver<T> = (value) => {
       this._resolve!(value);
 
       this._resolve = undefined;
@@ -50,7 +50,7 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
       this._state = PromiseState.fulfilled;
     };
 
-    const rejectFn: PromiseRejectFn = (reason) => {
+    const rejectFn: PromiseRejector = (reason) => {
       this._reject!(reason);
 
       this._resolve = undefined;
