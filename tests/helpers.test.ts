@@ -7,7 +7,7 @@ import {
   isArrayLike,
   isIterable,
   isAsyncIterable
-} from "../src/helpers";
+} from "../src/common";
 import { List } from "../src/list";
 
 

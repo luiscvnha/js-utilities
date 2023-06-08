@@ -1,6 +1,11 @@
-import { isArrayLike, isAsyncIterable, isIterable, sameValueZero } from "../helpers";
-import { Comparer } from "../compare";
-import { ListToLocaleStringOptions } from "./types";
+import {
+  ToLocaleStringOptions,
+  isArrayLike,
+  isAsyncIterable,
+  isIterable,
+  sameValueZero
+} from "./common";
+import { Comparer } from "./compare";
 
 
 type FlattenList<Type, Depth extends number> = [
@@ -681,7 +686,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     return `[${List.join(this, List.separator, String)}]`;
   }
 
-  public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ListToLocaleStringOptions | undefined): string {
+  public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
     return `[${List.join(this, List.separator, List.getLocaleStringifier(locales, options))}]`;
   }
 
@@ -872,7 +877,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     return r;
   }
 
-  private static getLocaleStringifier(locales?: Intl.LocalesArgument | undefined, options?: ListToLocaleStringOptions | undefined): (value: any) => string {
+  private static getLocaleStringifier(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): (value: any) => string {
     return function(value: any) {
       let r: string;
 
