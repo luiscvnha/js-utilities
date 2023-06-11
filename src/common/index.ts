@@ -1,2 +1,5 @@
 export * from "./types";
-export * from "./helpers";
+export * from "./general";
+export * from "./numbers";
+export * from "./strings";
+export * from "./arrays";
