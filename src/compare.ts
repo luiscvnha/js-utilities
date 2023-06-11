@@ -1,4 +1,4 @@
-import { Comparer, Order } from "./types";
+import { Comparer, Order } from "./common";
 
 
 export class Compare {
