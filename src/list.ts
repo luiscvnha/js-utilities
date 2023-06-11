@@ -1,11 +1,15 @@
 import {
   ToLocaleStringOptions,
+  getLocaleStringifier,
   isArrayLike,
   isAsyncIterable,
   isIterable,
-  sameValueZero
+  join,
+  sameValueZero,
+  toAbsoluteIndex,
+  toIntegerOrInfinity,
+  Comparer
 } from "./common";
-import { Comparer } from "./compare";
 
 
 type FlattenList<Type, Depth extends number> = [
@@ -107,12 +111,12 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public fill(value: T, start?: number | undefined, end?: number | undefined): this {
-    start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
+    start = start === undefined ? 0 : toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
       return this;
     }
 
-    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return this;
     }
@@ -134,7 +138,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public at(index: number): T | undefined {
-    index = List.toIntegerOrInfinity(index);
+    index = toIntegerOrInfinity(index);
     if (index < -this._length || index >= this._length) {
       return undefined;
     } else if (index < 0) {
@@ -145,9 +149,9 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public with(index: number, value: T): List<T> {
-    index = List.toIntegerOrInfinity(index);
+    index = toIntegerOrInfinity(index);
     if (index < -this._length || index >= this._length) {
-      throw new RangeError();
+      throw new RangeError("Invalid index value");
     } else if (index < 0) {
       index += this._length;
     }
@@ -159,7 +163,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public has(searchElement: T, fromIndex?: number | undefined): boolean {
-    fromIndex = fromIndex === undefined ? 0 : List.toAbsoluteIndex(fromIndex, this._length);
+    fromIndex = fromIndex === undefined ? 0 : toAbsoluteIndex(fromIndex, this._length);
 
     const length = this._length;
     for (let i = fromIndex; i < length; ++i) {
@@ -172,7 +176,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public indexOf(searchElement: T, fromIndex?: number | undefined): number | undefined {
-    fromIndex = fromIndex === undefined ? 0 : List.toAbsoluteIndex(fromIndex, this._length);
+    fromIndex = fromIndex === undefined ? 0 : toAbsoluteIndex(fromIndex, this._length);
 
     const length = this._length;
     for (let i = fromIndex; i < length; ++i) {
@@ -188,7 +192,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     if (fromIndex === undefined) {
       fromIndex = this._length - 1;
     } else {
-      fromIndex = List.toIntegerOrInfinity(fromIndex);
+      fromIndex = toIntegerOrInfinity(fromIndex);
       if (fromIndex < 0) {
         fromIndex += this._length;
       } else if (fromIndex >= this._length) {
@@ -541,12 +545,12 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public slice(start?: number | undefined, end?: number | undefined): List<T> {
-    start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
+    start = start === undefined ? 0 : toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
       return new List<T>();
     }
 
-    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return new List<T>();
     }
@@ -563,7 +567,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public splice(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
-    start = List.toAbsoluteIndex(start, this._length);
+    start = toAbsoluteIndex(start, this._length);
 
     const length = this._length;
     deleteCount = deleteCount === undefined || deleteCount <= 0
@@ -590,7 +594,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public toSpliced(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
-    start = List.toAbsoluteIndex(start, this._length);
+    start = toAbsoluteIndex(start, this._length);
 
     const length = this._length;
     deleteCount = deleteCount === undefined || deleteCount <= 0
@@ -620,17 +624,17 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public copyWithin(target: number, start: number, end?: number | undefined): this {
-    target = List.toAbsoluteIndex(target, this._length);
+    target = toAbsoluteIndex(target, this._length);
     if (target >= this._length) {
       return this;
     }
 
-    start = List.toAbsoluteIndex(start, this._length);
+    start = toAbsoluteIndex(start, this._length);
     if (start >= this._length || start === target) {
       return this;
     }
 
-    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return this;
     }
@@ -679,15 +683,15 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public join(separator?: string | undefined): string {
-    return List.join(this, separator ?? List.separator, String);
+    return join(this, separator ?? List.separator, String);
   }
 
   public toString(): string {
-    return `[${List.join(this, List.separator, String)}]`;
+    return `[${join(this, List.separator, String)}]`;
   }
 
   public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
-    return `[${List.join(this, List.separator, List.getLocaleStringifier(locales, options))}]`;
+    return `[${join(this, List.separator, getLocaleStringifier(locales, options))}]`;
   }
 
   public toArray(): T[] {
@@ -702,30 +706,34 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   /* static */
 
 
-  public static from<T>(iterable: Iterable<T> | ArrayLike<T>): List<T>;
-  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): List<U>;
-  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): List<T> | List<U> {
+  public static from<T>(array: Iterable<T> | ArrayLike<T>): List<T>;
+  public static from<T, U>(array: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): List<U>;
+  public static from<T, U>(array: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): List<T> | List<U> {
     const r = new List();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
     }
 
-    if (isIterable(iterable)) {
-      const iterator: Iterator<T> = iterable[Symbol.iterator]();
+    if (isIterable<T>(array)) {
+      const iterator: Iterator<T> = array[Symbol.iterator]();
 
       let i = 0;
-      for (let iteratorResult = iterator.next(); !iteratorResult.done; iteratorResult = iterator.next(), ++i) {
+      for (
+        let iteratorResult = iterator.next();
+        iteratorResult.done !== true;
+        iteratorResult = iterator.next(), ++i
+      ) {
         r[i] = mapFn !== undefined ? mapFn(iteratorResult.value, i) : iteratorResult.value;
       }
 
       r._length = i;
     }
-    else if (isArrayLike(iterable)) {
-      const length = iterable.length;
+    else if (isArrayLike<T>(array)) {
+      const length = array.length;
       let i = 0;
       while (i < length) {
-        r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
+        r[i] = mapFn !== undefined ? mapFn(array[i], i) : array[i];
         ++i;
       }
 
@@ -738,25 +746,25 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     return r;
   }
 
-  public static async fromAsync<T>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>): Promise<List<T>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn?: (value: T, index: number) => U, thisArg?: any): Promise<List<T> | List<U>> {
+  public static async fromAsync<T>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>): Promise<List<T>>;
+  public static async fromAsync<T, U>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
+  public static async fromAsync<T, U>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn?: (value: T, index: number) => U, thisArg?: any): Promise<List<T> | List<U>> {
     const r = new List();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
     }
 
-    const asyncIterable = isAsyncIterable(iterable);
-    if (asyncIterable || isIterable(iterable)) {
+    const asyncIterable = isAsyncIterable<T>(array);
+    if (asyncIterable || isIterable<T>(array)) {
       const iterator: AsyncIterator<T> | Iterator<T> = asyncIterable
-        ? iterable[Symbol.asyncIterator]()
-        : iterable[Symbol.iterator]();
+        ? array[Symbol.asyncIterator]()
+        : array[Symbol.iterator]();
 
       let i = 0;
       for (
         let iteratorResult = await iterator.next();
-        !iteratorResult.done;
+        iteratorResult.done !== true;
         iteratorResult = await iterator.next(), ++i
       ) {
         r[i] = mapFn !== undefined ? mapFn(iteratorResult.value, i) : iteratorResult.value;
@@ -764,11 +772,11 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
 
       r._length = i;
     }
-    else if (isArrayLike(iterable)) {
-      const length = iterable.length;
+    else if (isArrayLike<T>(array)) {
+      const length = array.length;
       let i = 0;
       while (i < length) {
-        r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
+        r[i] = mapFn !== undefined ? mapFn(array[i], i) : array[i];
         ++i;
       }
 
@@ -863,76 +871,12 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     return i;
   }
 
-  private static join(list: List, separator: string, stringifier: (value: any) => string): string {
-    const length = list._length;
-    if (length <= 0) {
-      return "";
-    }
-
-    let r = stringifier(list[0]);
-    for (let i = 1; i < length; ++i) {
-      r += separator + stringifier(list[i]);
-    }
-
-    return r;
-  }
-
-  private static getLocaleStringifier(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): (value: any) => string {
-    return function(value: any) {
-      let r: string;
-
-      if (
-        typeof value === "number"
-        || typeof value === "bigint"
-        || (typeof value === "object"
-          && (value instanceof Date
-            || value instanceof Number
-            || value instanceof BigInt
-          )
-        )
-      ) {
-        r = (value as any).toLocaleString(locales, options);
-      } else {
-        r = String(value);
-      }
-
-      return r;
-    };
-  }
-
-  private static toIntegerOrInfinity(value: number): number {
-    return Number.isNaN(value) || value === 0 ? 0 : Math.trunc(value);
-  }
-
-  /**
-   * @param index relative index
-   * @param length length of the list
-   * @returns absolute index
-   */
-  private static toAbsoluteIndex(index: number, length: number): number {
-    index = List.toIntegerOrInfinity(index);
-    return index < 0
-      ? Math.max(index + length, 0)
-      : Math.min(index, length);
-  }
-
-  /**
-   * @param list
-   * @param i first position (absolute index)
-   * @param j second position (absolute index)
-   */
   private static swap(list: List, i: number, j: number): void {
     const tmp = list[i];
     list[i] = list[j];
     list[j] = tmp;
   }
 
-  /**
-   * @param list
-   * @param target (absolute index)
-   * @param start (absolute index)
-   * @param end (absolute index)
-   */
   private static copy(list: List, target: number, start: number, end: number): void {
     if (
       target < 0
