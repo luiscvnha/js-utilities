@@ -27,22 +27,22 @@ export function isArrayLike<T = any>(value: any): value is ArrayLike<T> {
 }
 
 
-export function join<T>(array: Iterable<T> | ArrayLike<T>, separator: string, stringifier: (value: T) => string): string {
+export function join<T>(iterable: Iterable<T> | ArrayLike<T>, separator: string, stringifier: (value: T) => string): string {
   let r: string;
 
-  if (isArrayLike<T>(array)) {
-    const length = array.length;
+  if (isArrayLike<T>(iterable)) {
+    const length = iterable.length;
     if (length <= 0) {
       return "";
     }
 
-    r = stringifier(array[0]);
+    r = stringifier(iterable[0]);
     for (let i = 1; i < length; ++i) {
-      r += separator + stringifier(array[i]);
+      r += separator + stringifier(iterable[i]);
     }
   }
-  else if (isIterable<T>(array)) {
-    const iterator = array[Symbol.iterator]();
+  else if (isIterable<T>(iterable)) {
+    const iterator = iterable[Symbol.iterator]();
     let result = iterator.next();
     if (result.done === true) {
       return "";
@@ -58,7 +58,7 @@ export function join<T>(array: Iterable<T> | ArrayLike<T>, separator: string, st
     }
   }
   else {
-    throw new TypeError();
+    throw new TypeError("Invalid iterable value");
   }
 
   return r;

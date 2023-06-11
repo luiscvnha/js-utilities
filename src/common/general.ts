@@ -27,7 +27,7 @@ export function sameValueZero(x: any, y: any): boolean {
 
 export function typeOf(value: any): string {
   const match = Object.prototype.toString.call(value).match(/\s([a-zA-Z0-9_$]+)/);
-  if (isNullish(match) || isNullish(match[1])) { throw new TypeError(); }
+  if (isNullish(match) || isNullish(match[1])) { throw new TypeError("Invalid type"); }
   return match[1].toLowerCase();
 }
 

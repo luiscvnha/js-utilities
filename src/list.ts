@@ -706,17 +706,17 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   /* static */
 
 
-  public static from<T>(array: Iterable<T> | ArrayLike<T>): List<T>;
-  public static from<T, U>(array: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): List<U>;
-  public static from<T, U>(array: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): List<T> | List<U> {
+  public static from<T>(iterable: Iterable<T> | ArrayLike<T>): List<T>;
+  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): List<U>;
+  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): List<T> | List<U> {
     const r = new List();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
     }
 
-    if (isIterable<T>(array)) {
-      const iterator: Iterator<T> = array[Symbol.iterator]();
+    if (isIterable<T>(iterable)) {
+      const iterator: Iterator<T> = iterable[Symbol.iterator]();
 
       let i = 0;
       for (
@@ -729,37 +729,37 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
 
       r._length = i;
     }
-    else if (isArrayLike<T>(array)) {
-      const length = array.length;
+    else if (isArrayLike<T>(iterable)) {
+      const length = iterable.length;
       let i = 0;
       while (i < length) {
-        r[i] = mapFn !== undefined ? mapFn(array[i], i) : array[i];
+        r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
         ++i;
       }
 
       r._length = i;
     }
     else {
-      throw new TypeError();
+      throw new TypeError("Invalid iterable value");
     }
 
     return r;
   }
 
-  public static async fromAsync<T>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>): Promise<List<T>>;
-  public static async fromAsync<T, U>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
-  public static async fromAsync<T, U>(array: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn?: (value: T, index: number) => U, thisArg?: any): Promise<List<T> | List<U>> {
+  public static async fromAsync<T>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>): Promise<List<T>>;
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn?: (value: T, index: number) => U, thisArg?: any): Promise<List<T> | List<U>> {
     const r = new List();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
     }
 
-    const asyncIterable = isAsyncIterable<T>(array);
-    if (asyncIterable || isIterable<T>(array)) {
+    const asyncIterable = isAsyncIterable<T>(iterable);
+    if (asyncIterable || isIterable<T>(iterable)) {
       const iterator: AsyncIterator<T> | Iterator<T> = asyncIterable
-        ? array[Symbol.asyncIterator]()
-        : array[Symbol.iterator]();
+        ? iterable[Symbol.asyncIterator]()
+        : iterable[Symbol.iterator]();
 
       let i = 0;
       for (
@@ -772,18 +772,18 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
 
       r._length = i;
     }
-    else if (isArrayLike<T>(array)) {
-      const length = array.length;
+    else if (isArrayLike<T>(iterable)) {
+      const length = iterable.length;
       let i = 0;
       while (i < length) {
-        r[i] = mapFn !== undefined ? mapFn(array[i], i) : array[i];
+        r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
         ++i;
       }
 
       r._length = i;
     }
     else {
-      throw new TypeError();
+      throw new TypeError("Invalid iterable value");
     }
 
     return r;
