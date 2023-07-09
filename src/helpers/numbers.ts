@@ -6,7 +6,7 @@ export function toIntegerOrInfinity(value: number): number {
 /**
  * @param index relative index
  * @param length length of the array
- * @returns absolute index
+ * @returns absolute index, 0 if index < -length or length if index > length
  */
 export function toAbsoluteIndex(index: number, length: number): number {
   index = toIntegerOrInfinity(index);
