@@ -1,4 +1,4 @@
-import { ToLocaleStringOptions } from "./types";
+import { ToLocaleStringOptions } from "../common";
 
 
 export function getLocaleStringifier(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): (value: any) => string {

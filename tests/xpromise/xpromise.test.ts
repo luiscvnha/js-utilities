@@ -1,21 +1,16 @@
-import { PromiseState, ExecutableXPromise } from "../src/xpromise";
+import { PromiseState, XPromise } from "../../src/xpromise";
 
 
-describe("Testing ExecutableXPromise", () => {
+describe("Testing XPromise", () => {
 
   test("State when unsettled", () => {
-    const p = new ExecutableXPromise();
-
-    expect(p.state).toBe(PromiseState.pending);
-
-    p.execute(() => {});
+    const p = new XPromise(() => {});
 
     expect(p.state).toBe(PromiseState.pending);
   });
 
   test("State when resolving synchronously", () => {
-    const p = new ExecutableXPromise();
-    p.execute((resolve) => {
+    const p = new XPromise((resolve) => {
       resolve();
     });
 
@@ -27,8 +22,7 @@ describe("Testing ExecutableXPromise", () => {
   });
 
   test("State when rejecting synchronously", () => {
-    const p = new ExecutableXPromise();
-    p.execute((resolve, reject) => {
+    const p = new XPromise((resolve, reject) => {
       reject();
     });
 
@@ -40,8 +34,7 @@ describe("Testing ExecutableXPromise", () => {
   });
 
   test("State when resolving asynchronously", () => {
-    const p = new ExecutableXPromise();
-    p.execute((resolve) => {
+    const p = new XPromise((resolve) => {
       setTimeout(() => {
         resolve();
       });
@@ -55,8 +48,7 @@ describe("Testing ExecutableXPromise", () => {
   });
 
   test("State when rejecting asynchronously", () => {
-    const p = new ExecutableXPromise();
-    p.execute((resolve, reject) => {
+    const p = new XPromise((resolve, reject) => {
       setTimeout(() => {
         reject();
       });

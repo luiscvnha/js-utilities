@@ -1,5 +1,5 @@
+import { ToLocaleStringOptions, Comparer } from "./common";
 import {
-  ToLocaleStringOptions,
   getLocaleStringifier,
   isArrayLike,
   isAsyncIterable,
@@ -8,8 +8,7 @@ import {
   sameValueZero,
   toAbsoluteIndex,
   toIntegerOrInfinity,
-  Comparer
-} from "./common";
+} from "./helpers";
 
 
 type FlattenList<Type, Depth extends number> = [

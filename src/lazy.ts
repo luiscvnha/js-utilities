@@ -1,4 +1,5 @@
-import { ToLocaleStringOptions, isNullish } from "./common";
+import { ToLocaleStringOptions } from "./common";
+import { isNullish } from "./helpers";
 
 
 export class Lazy<T = any> {
