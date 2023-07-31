@@ -1,4 +1,4 @@
-# js-utilities
+# JS Utilities
 
 JavaScript/TypeScript utilities written in TypeScript.
 
