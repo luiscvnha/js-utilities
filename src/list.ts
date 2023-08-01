@@ -5,9 +5,7 @@ import {
   isAsyncIterable,
   isIterable,
   join,
-  sameValueZero,
-  toAbsoluteIndex,
-  toIntegerOrInfinity,
+  sameValueZero
 } from "./helpers";
 
 
@@ -19,7 +17,7 @@ type FlattenList<Type, Depth extends number> = [
 ][Depth extends -1 ? 0 : 1];
 
 
-export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexable<T> {
+export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexable<T> {
   [index: number]: T;
 
   private _length: number;
@@ -110,12 +108,12 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public fill(value: T, start?: number | undefined, end?: number | undefined): this {
-    start = start === undefined ? 0 : toAbsoluteIndex(start, this._length);
+    start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
       return this;
     }
 
-    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return this;
     }
@@ -137,7 +135,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public at(index: number): T | undefined {
-    index = toIntegerOrInfinity(index);
+    index = List.toIntegerOrInfinity(index);
     if (index < -this._length || index >= this._length) {
       return undefined;
     } else if (index < 0) {
@@ -148,7 +146,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public with(index: number, value: T): List<T> {
-    index = toIntegerOrInfinity(index);
+    index = List.toIntegerOrInfinity(index);
     if (index < -this._length || index >= this._length) {
       throw new RangeError("Invalid index value");
     } else if (index < 0) {
@@ -162,7 +160,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public has(searchElement: T, fromIndex?: number | undefined): boolean {
-    fromIndex = fromIndex === undefined ? 0 : toAbsoluteIndex(fromIndex, this._length);
+    fromIndex = fromIndex === undefined ? 0 : List.toAbsoluteIndex(fromIndex, this._length);
 
     const length = this._length;
     for (let i = fromIndex; i < length; ++i) {
@@ -175,7 +173,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public indexOf(searchElement: T, fromIndex?: number | undefined): number | undefined {
-    fromIndex = fromIndex === undefined ? 0 : toAbsoluteIndex(fromIndex, this._length);
+    fromIndex = fromIndex === undefined ? 0 : List.toAbsoluteIndex(fromIndex, this._length);
 
     const length = this._length;
     for (let i = fromIndex; i < length; ++i) {
@@ -191,7 +189,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
     if (fromIndex === undefined) {
       fromIndex = this._length - 1;
     } else {
-      fromIndex = toIntegerOrInfinity(fromIndex);
+      fromIndex = List.toIntegerOrInfinity(fromIndex);
       if (fromIndex < 0) {
         fromIndex += this._length;
       } else if (fromIndex >= this._length) {
@@ -544,12 +542,12 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public slice(start?: number | undefined, end?: number | undefined): List<T> {
-    start = start === undefined ? 0 : toAbsoluteIndex(start, this._length);
+    start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
       return new List<T>();
     }
 
-    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return new List<T>();
     }
@@ -566,7 +564,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public splice(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
-    start = toAbsoluteIndex(start, this._length);
+    start = List.toAbsoluteIndex(start, this._length);
 
     const length = this._length;
     deleteCount = deleteCount === undefined || deleteCount <= 0
@@ -593,7 +591,7 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public toSpliced(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
-    start = toAbsoluteIndex(start, this._length);
+    start = List.toAbsoluteIndex(start, this._length);
 
     const length = this._length;
     deleteCount = deleteCount === undefined || deleteCount <= 0
@@ -623,17 +621,17 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
   }
 
   public copyWithin(target: number, start: number, end?: number | undefined): this {
-    target = toAbsoluteIndex(target, this._length);
+    target = List.toAbsoluteIndex(target, this._length);
     if (target >= this._length) {
       return this;
     }
 
-    start = toAbsoluteIndex(start, this._length);
+    start = List.toAbsoluteIndex(start, this._length);
     if (start >= this._length || start === target) {
       return this;
     }
 
-    end = end === undefined ? this._length : toAbsoluteIndex(end, this._length);
+    end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
     if (end <= start) {
       return this;
     }
@@ -813,6 +811,22 @@ export class List<T = any> implements ArrayLike<T>, Iterable<T>, RelativeIndexab
 
   /* private */
 
+
+  private static toIntegerOrInfinity(index: number): number {
+    return Number.isNaN(index) || index === 0 ? 0 : Math.trunc(index);
+  }
+
+  /**
+   * @param index relative index
+   * @param length length of the array
+   * @returns absolute index, 0 if index < -length or length if index > length
+   */
+  private static toAbsoluteIndex(index: number, length: number): number {
+    index = List.toIntegerOrInfinity(index);
+    return index < 0
+      ? Math.max(index + length, 0)
+      : Math.min(index, length);
+  }
 
   private static flat(dest: List, src: List, depth: number): void {
     if (depth <= 0) {

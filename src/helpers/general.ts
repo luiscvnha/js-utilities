@@ -1,19 +1,21 @@
 export function isNullish(value: any): value is null | undefined {
-  return value === null || value === undefined;
+  return value === null
+    || value === undefined;
 }
 
 
-export function isNullishOrEmpty(value: any): value is null | undefined | { length: 0 } {
-  return value === null || value === undefined || (
-    typeof value.length === "number" && value.length <= 0
-  );
+export function isNullishOrEmpty(value: any): value is null | undefined | { length: 0 } | { size: 0 } {
+  return value === null
+    || value === undefined
+    || (typeof value.length === "number" && value.length <= 0)
+    || (typeof value.size === "number" && value.size <= 0);
 }
 
 
 export function isNullishOrWhitespace(value: any): value is null | undefined | "" {
-  return value === null || value === undefined || (
-    typeof value === "string" && value.trim().length <= 0
-  );
+  return value === null
+    || value === undefined
+    || (typeof value === "string" && value.trim().length <= 0);
 }
 
 
