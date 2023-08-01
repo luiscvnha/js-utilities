@@ -11,8 +11,8 @@ import {
 
 type FlattenList<Type, Depth extends number> = [
   Type,
-  Type extends List<infer InnerLst>
-    ? FlattenList<InnerLst, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
+  Type extends List<infer InnerList>
+    ? FlattenList<InnerList, [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][Depth]>
     : Type
 ][Depth extends -1 ? 0 : 1];
 
@@ -402,17 +402,21 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return accumulator;
   }
 
-  public concat(...items: List<T>[]): List<T> {
+  public concat(...items: (T | List<T>)[]): List<T> {
     const r = this.clone();
     let length = r._length;
 
     const itemsLength = items.length;
     for (let i = 0; i < itemsLength; ++i) {
-      const list = items[i];
+      const item = items[i];
 
-      const listLength = list._length;
-      for (let j = 0; j < listLength; ++j) {
-        r[length++] = list[j];
+      if (item instanceof List) {
+        const listLength = item._length;
+        for (let j = 0; j < listLength; ++j) {
+          r[length++] = item[j];
+        }
+      } else {
+        r[length++] = item;
       }
     }
 
