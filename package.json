@@ -8,6 +8,7 @@
   },
   "scripts": {
     "build": "npx tsc",
+    "rebuild": "rm -rf dist && npx tsc",
     "test": "npx jest"
   },
   "license": "MIT",
