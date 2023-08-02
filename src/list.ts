@@ -125,6 +125,10 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return this;
   }
 
+  public isEmpty(): boolean {
+    return this._length <= 0;
+  }
+
   public clear(): void {
     const length = this._length;
     for (let i = 0; i < length; ++i) {

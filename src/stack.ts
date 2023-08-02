@@ -62,6 +62,10 @@ export class Stack<T = any> implements Iterable<T> {
     return this[this._size - 1];
   }
 
+  public isEmpty(): boolean {
+    return this._size <= 0;
+  }
+
   public clear(): void {
     const length = this._size;
     for (let i = 0; i < length; ++i) {
