@@ -67,7 +67,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     const length = this._length;
     const itemsLength = items.length;
     if (itemsLength > 0) {
-      List.copy(this, itemsLength, 0, length);
+      this.copy(itemsLength, 0, length);
 
       for (let i = 0; i < itemsLength; ++i) {
         this[i] = items[i];
@@ -98,7 +98,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
 
     const first = this[0];
 
-    List.copy(this, 0, 1, this._length);
+    this.copy(0, 1, this._length);
 
     --this._length;
 
@@ -582,7 +582,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     const removedElements = this.slice(start, start + deleteCount);
 
     const itemsLength = items.length;
-    List.copy(this, start + itemsLength, start + deleteCount, length);
+    this.copy(start + itemsLength, start + deleteCount, length);
 
     for (let i = 0; i < itemsLength; ++i) {
       this[start + i] = items[i];
@@ -649,7 +649,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
       end = start + availableSpace;
     }
 
-    List.copy(this, target, start, end);
+    this.copy(target, start, end);
 
     return this;
   }
@@ -659,7 +659,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     const mid = Math.trunc(length / 2);
 
     for (let i = 0; i < mid; ++i) {
-      List.swap(this, i, length - 1 - i);
+      this.swap(i, length - 1 - i);
     }
 
     return this;
@@ -679,7 +679,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   }
 
   public sort(compareFn: Comparer<T>): this {
-    List.quickSort(this, 0, this._length - 1, compareFn);
+    this.quickSort(0, this._length - 1, compareFn);
     return this;
   }
 
@@ -708,7 +708,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   }
 
 
-  /* static */
+  /* public static */
 
 
   public static from<T>(iterable: Iterable<T> | ArrayLike<T>): List<T>;
@@ -820,6 +820,85 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   /* private */
 
 
+  private quickSort(left: number, right: number, compareFn: Comparer<T>): void {
+    let index;
+
+    if (this.length > 1) {
+      index = this.partition(left, right, compareFn);
+
+      if (left < index - 1) {
+        this.quickSort(left, index - 1, compareFn);
+      }
+
+      if (index < right) {
+        this.quickSort(index, right, compareFn);
+      }
+    }
+  }
+
+  private partition(left: number, right: number, compareFn: Comparer<T>): number {
+    const pivot = this[Math.floor((right + left) / 2)];
+    let i = left;
+    let j = right;
+
+    while (i <= j) {
+      while (compareFn(this[i], pivot) < 0) {
+        ++i;
+      }
+
+      while (compareFn(this[j], pivot) > 0) {
+        --j;
+      }
+
+      if (i <= j) {
+        this.swap(i, j);
+        ++i;
+        --j;
+      }
+    }
+
+    return i;
+  }
+
+  private swap(i: number, j: number): void {
+    const tmp = this[i];
+    this[i] = this[j];
+    this[j] = tmp;
+  }
+
+  private copy(target: number, start: number, end: number): void {
+    if (
+      target < 0
+      || start < 0
+      || end > this._length
+      || target === start
+      || end <= start
+    ) {
+      return;
+    }
+
+    let count = end - start;
+    let inc = 1;
+
+    if (start < target && target < start + count) {
+      inc = -1;
+      start += count - 1;
+      target += count - 1;
+    }
+
+    while (count > 0) {
+      this[target] = this[start];
+
+      --count;
+      target += inc;
+      start += inc;
+    }
+  }
+
+
+  /* private static */
+
+
   private static toIntegerOrInfinity(index: number): number {
     return Number.isNaN(index) || index === 0 ? 0 : Math.trunc(index);
   }
@@ -849,81 +928,6 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
       } else {
         dest.append(src[i]);
       }
-    }
-  }
-
-  private static quickSort<T>(list: List<T>, left: number, right: number, compareFn: Comparer<T>): void {
-    let index;
-
-    if (list.length > 1) {
-      index = List.partition(list, left, right, compareFn);
-
-      if (left < index - 1) {
-        List.quickSort(list, left, index - 1, compareFn);
-      }
-
-      if (index < right) {
-        List.quickSort(list, index, right, compareFn);
-      }
-    }
-  }
-
-  private static partition<T>(list: List<T>, left: number, right: number, compareFn: Comparer<T>): number {
-    const pivot = list[Math.floor((right + left) / 2)];
-    let i = left;
-    let j = right;
-
-    while (i <= j) {
-      while (compareFn(list[i], pivot) < 0) {
-        ++i;
-      }
-
-      while (compareFn(list[j], pivot) > 0) {
-        --j;
-      }
-
-      if (i <= j) {
-        List.swap(list, i, j);
-        ++i;
-        --j;
-      }
-    }
-
-    return i;
-  }
-
-  private static swap(list: List, i: number, j: number): void {
-    const tmp = list[i];
-    list[i] = list[j];
-    list[j] = tmp;
-  }
-
-  private static copy(list: List, target: number, start: number, end: number): void {
-    if (
-      target < 0
-      || start < 0
-      || end > list._length
-      || target === start
-      || end <= start
-    ) {
-      return;
-    }
-
-    let count = end - start;
-    let inc = 1;
-
-    if (start < target && target < start + count) {
-      inc = -1;
-      start += count - 1;
-      target += count - 1;
-    }
-
-    while (count > 0) {
-      list[target] = list[start];
-
-      --count;
-      target += inc;
-      start += inc;
     }
   }
 }
