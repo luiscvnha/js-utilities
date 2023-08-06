@@ -6,17 +6,17 @@ describe("Testing DeferredXPromise", () => {
   test("State when unsettled", () => {
     const p = new DeferredXPromise();
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
   });
 
   test("State when resolving synchronously", () => {
     const p = new DeferredXPromise();
     p.resolve();
 
-    expect(p.state).toBe(PromiseState.fulfilled);
+    expect(p.state).toBe(PromiseState.Fulfilled);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.fulfilled);
+      expect(p.state).toBe(PromiseState.Fulfilled);
     });
   });
 
@@ -24,10 +24,10 @@ describe("Testing DeferredXPromise", () => {
     const p = new DeferredXPromise();
     p.reject();
 
-    expect(p.state).toBe(PromiseState.rejected);
+    expect(p.state).toBe(PromiseState.Rejected);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.rejected);
+      expect(p.state).toBe(PromiseState.Rejected);
     });
   });
 
@@ -37,10 +37,10 @@ describe("Testing DeferredXPromise", () => {
       p.resolve();
     });
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.fulfilled);
+      expect(p.state).toBe(PromiseState.Fulfilled);
     });
   });
 
@@ -50,10 +50,10 @@ describe("Testing DeferredXPromise", () => {
       p.reject();
     });
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.rejected);
+      expect(p.state).toBe(PromiseState.Rejected);
     });
   });
 

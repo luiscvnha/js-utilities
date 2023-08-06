@@ -22,18 +22,18 @@ export abstract class BaseXPromise<T> extends Promise<T> implements IXPromise<T>
   }
 
   public get isPending(): boolean {
-    return this._state === PromiseState.pending;
+    return this._state === PromiseState.Pending;
   }
 
   public get isFulfilled(): boolean {
-    return this._state === PromiseState.fulfilled;
+    return this._state === PromiseState.Fulfilled;
   }
 
   public get isRejected(): boolean {
-    return this._state === PromiseState.rejected;
+    return this._state === PromiseState.Rejected;
   }
 
   public get isSettled(): boolean {
-    return this._state === PromiseState.fulfilled || this._state === PromiseState.rejected;
+    return this._state === PromiseState.Fulfilled || this._state === PromiseState.Rejected;
   }
 }

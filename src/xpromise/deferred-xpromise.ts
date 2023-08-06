@@ -29,7 +29,7 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
     this._resolve = resolveTmp;
     this._reject = rejectTmp;
 
-    this._state = PromiseState.pending;
+    this._state = PromiseState.Pending;
   }
 
 
@@ -40,7 +40,7 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
       this._resolve = undefined;
       this._reject = undefined;
 
-      this._state = PromiseState.fulfilled;
+      this._state = PromiseState.Fulfilled;
     }
 
     return this;
@@ -53,7 +53,7 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
       this._resolve = undefined;
       this._reject = undefined;
 
-      this._state = PromiseState.rejected;
+      this._state = PromiseState.Rejected;
     }
 
     return this;

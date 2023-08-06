@@ -6,11 +6,11 @@ describe("Testing ExecutableXPromise", () => {
   test("State when unsettled", () => {
     const p = new ExecutableXPromise();
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
 
     p.execute(() => {});
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
   });
 
   test("State when resolving synchronously", () => {
@@ -19,10 +19,10 @@ describe("Testing ExecutableXPromise", () => {
       resolve();
     });
 
-    expect(p.state).toBe(PromiseState.fulfilled);
+    expect(p.state).toBe(PromiseState.Fulfilled);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.fulfilled);
+      expect(p.state).toBe(PromiseState.Fulfilled);
     });
   });
 
@@ -32,10 +32,10 @@ describe("Testing ExecutableXPromise", () => {
       reject();
     });
 
-    expect(p.state).toBe(PromiseState.rejected);
+    expect(p.state).toBe(PromiseState.Rejected);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.rejected);
+      expect(p.state).toBe(PromiseState.Rejected);
     });
   });
 
@@ -47,10 +47,10 @@ describe("Testing ExecutableXPromise", () => {
       });
     });
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.fulfilled);
+      expect(p.state).toBe(PromiseState.Fulfilled);
     });
   });
 
@@ -62,10 +62,10 @@ describe("Testing ExecutableXPromise", () => {
       });
     });
 
-    expect(p.state).toBe(PromiseState.pending);
+    expect(p.state).toBe(PromiseState.Pending);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.rejected);
+      expect(p.state).toBe(PromiseState.Rejected);
     });
   });
 

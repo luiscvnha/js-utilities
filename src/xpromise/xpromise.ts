@@ -22,17 +22,17 @@ export class XPromise<T = void> extends BaseXPromise<T> {
       executor(
         (value) => {
           resolve(value);
-          state = PromiseState.fulfilled;
+          state = PromiseState.Fulfilled;
           this._state = state;
         },
         (reason) => {
           reject(reason);
-          state = PromiseState.rejected;
+          state = PromiseState.Rejected;
           this._state = state;
         }
       );
     });
 
-    this._state = state ?? PromiseState.pending;
+    this._state = state ?? PromiseState.Pending;
   }
 }
