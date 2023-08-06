@@ -7,6 +7,7 @@ import {
   join,
   sameValueZero
 } from "./helpers";
+import { Compare } from "./compare";
 
 
 type FlattenList<Type, Depth extends number> = [
@@ -64,10 +65,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   }
 
   public prepend(...items: T[]): number {
-    const length = this._length;
     const itemsLength = items.length;
     if (itemsLength > 0) {
-      this.copy(itemsLength, 0, length);
+      this.copy(itemsLength, 0, this._length);
 
       for (let i = 0; i < itemsLength; ++i) {
         this[i] = items[i];
@@ -550,20 +550,20 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   }
 
   public slice(start?: number | undefined, end?: number | undefined): List<T> {
+    const r = new List<T>();
+
     start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
-      return new List<T>();
+      return r;
     }
 
     end = end === undefined ? this._length : List.toAbsoluteIndex(end, this._length);
     if (end <= start) {
-      return new List<T>();
+      return r;
     }
 
-    const r = new List<T>();
-
     for (let i = start; i < end; ++i) {
-      r[i] = this[i];
+      r[i - start] = this[i];
     }
 
     r._length = end - start;
@@ -571,11 +571,11 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return r;
   }
 
-  public splice(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
+  public splice(start: number, deleteCount: number, ...items: T[]): List<T> {
     start = List.toAbsoluteIndex(start, this._length);
 
     const length = this._length;
-    deleteCount = deleteCount === undefined || deleteCount <= 0
+    deleteCount = deleteCount <= 0
       ? 0
       : Math.min(Math.trunc(deleteCount), length - start);
 
@@ -598,11 +598,11 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return removedElements;
   }
 
-  public toSpliced(start: number, deleteCount?: number | undefined, ...items: T[]): List<T> {
+  public toSpliced(start: number, deleteCount: number, ...items: T[]): List<T> {
     start = List.toAbsoluteIndex(start, this._length);
 
     const length = this._length;
-    deleteCount = deleteCount === undefined || deleteCount <= 0
+    deleteCount = deleteCount <= 0
       ? 0
       : Math.min(Math.trunc(deleteCount), length - start);
 
@@ -678,12 +678,13 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return r;
   }
 
-  public sort(compareFn: Comparer<T>): this {
+  public sort(compareFn?: Comparer<T> | undefined): this {
+    compareFn ??= Compare.asStrings();
     this.quickSort(0, this._length - 1, compareFn);
     return this;
   }
 
-  public toSorted(compareFn: Comparer<T>): List<T> {
+  public toSorted(compareFn?: Comparer<T> | undefined): List<T> {
     return this.clone().sort(compareFn);
   }
 
@@ -751,9 +752,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return r;
   }
 
-  public static async fromAsync<T>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>): Promise<List<T>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn?: (value: T, index: number) => U, thisArg?: any): Promise<List<T> | List<U>> {
+  public static async fromAsync<T>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>): Promise<List<T>>;
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): Promise<List<T> | List<U>> {
     const r = new List();
 
     if (mapFn !== undefined && thisArg !== undefined) {
@@ -772,7 +773,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
         iteratorResult.done !== true;
         iteratorResult = await iterator.next(), ++i
       ) {
-        r[i] = mapFn !== undefined ? mapFn(iteratorResult.value, i) : iteratorResult.value;
+        const value = await iteratorResult.value;
+        r[i] = mapFn !== undefined ? await mapFn(value, i) : value;
       }
 
       r._length = i;
@@ -781,7 +783,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
       const length = iterable.length;
       let i = 0;
       while (i < length) {
-        r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
+        const value = await iterable[i];
+        r[i] = mapFn !== undefined ? await mapFn(value, i) : value;
         ++i;
       }
 
