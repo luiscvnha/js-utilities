@@ -47,9 +47,15 @@ export class Queue<T = any> implements Iterable<T> {
   /* public */
 
 
-  public enqueue(value: T): number {
-    this[this._tail] = value;
-    ++this._tail;
+  public enqueue(...items: T[]): number {
+    const tail = this._tail;
+    const itemsLength = items.length;
+    for (let i = 0; i < itemsLength; ++i) {
+      this[tail + i] = items[i];
+    }
+
+    this._tail += itemsLength;
+
     return this.size;
   }
 

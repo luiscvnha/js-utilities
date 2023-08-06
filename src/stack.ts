@@ -36,9 +36,15 @@ export class Stack<T = any> implements Iterable<T> {
   /* public */
 
 
-  public push(value: T): number {
-    this[this._size] = value;
-    ++this._size;
+  public push(...items: T[]): number {
+    const size = this._size;
+    const itemsLength = items.length;
+    for (let i = 0; i < itemsLength; ++i) {
+      this[size + i] = items[i];
+    }
+
+    this._size += itemsLength;
+
     return this._size;
   }
 
