@@ -116,6 +116,89 @@ describe("Testing List", () => {
     expect(first).toBe(undefined);
   });
 
+  test("List.prototype.remove()", () => {
+    // #1
+    let list = new List(1, 2, 3, 2, 1);
+    let removed = list.remove(1);
+
+    expectToEqual(list, [2, 3, 2, 1]);
+    expect(removed).toBe(true);
+
+    // #2
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.remove(2);
+
+    expectToEqual(list, [1, 3, 2, 1]);
+    expect(removed).toBe(true);
+
+    // #3
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.remove(3);
+
+    expectToEqual(list, [1, 2, 2, 1]);
+    expect(removed).toBe(true);
+
+    // #4
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.remove(4);
+
+    expectToEqual(list, [1, 2, 3, 2, 1]);
+    expect(removed).toBe(false);
+  });
+
+  test("List.prototype.removeAll()", () => {
+    // #1
+    let list = new List(1, 2, 3, 2, 1);
+    let removed = list.removeAll(1);
+
+    expectToEqual(list, [2, 3, 2]);
+    expect(removed).toBe(2);
+
+    // #2
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.removeAll(2);
+
+    expectToEqual(list, [1, 3, 1]);
+    expect(removed).toBe(2);
+
+    // #3
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.removeAll(3);
+
+    expectToEqual(list, [1, 2, 2, 1]);
+    expect(removed).toBe(1);
+
+    // #4
+    list = new List(1, 2, 3, 2, 1);
+    removed = list.removeAll(4);
+
+    expectToEqual(list, [1, 2, 3, 2, 1]);
+    expect(removed).toBe(0);
+  });
+
+  test("List.prototype.removeIf()", () => {
+    // #1
+    let list = new List(1, 2, 3, 2, 1);
+    let removed = list.removeIf(v => v === 2);
+
+    expectToEqual(list, [1, 3, 1]);
+    expectToEqual(removed, [2, 2]);
+
+    // #2
+    list = new List(1, -5, 3, 5, -4);
+    removed = list.removeIf(v => v * v === 25);
+
+    expectToEqual(list, [1, 3, -4]);
+    expectToEqual(removed, [-5, 5]);
+
+    // #3
+    list = new List(1, 5, 3, 6, 4);
+    removed = list.removeIf(v => v < 0);
+
+    expectToEqual(list, [1, 5, 3, 6, 4]);
+    expectToEqual(removed, []);
+  });
+
   test("List.prototype.fill()", () => {
     // #1
     let list = new List(1, 2, 3);
@@ -1048,6 +1131,24 @@ describe("Testing List", () => {
     newList = list.toSorted();
 
     expectToEqual(newList, ["700", "80", "9"]);
+    expect(newList).not.toBe(list);
+  });
+
+  test("List.prototype.distinct()", () => {
+    // #1
+    const list = new List(1, 2, 2, 6, 4, 1, 2, 3, 5, 6);
+    const newList = list.distinct();
+
+    expectToEqual(newList, [1, 2, 6, 4, 3, 5]);
+    expect(newList).not.toBe(list);
+  });
+
+  test("List.prototype.distinctBy()", () => {
+    // #1
+    const list = new List({v: 1}, {v: 2}, {v: 2}, {v: 6}, {v: 4}, {v: 1}, {v: 2}, {v: 3}, {v: 5}, {v: 6});
+    const newList = list.distinctBy(o => o.v);
+
+    expectToEqual(newList, [{v: 1}, {v: 2}, {v: 6}, {v: 4}, {v: 3}, {v: 5}]);
     expect(newList).not.toBe(list);
   });
 

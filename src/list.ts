@@ -107,6 +107,79 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
     return first;
   }
 
+  public remove(value: T): boolean {
+    let length = this._length;
+    let i = 0;
+    for (; i < length; ++i) {
+      if (sameValueZero(this[i], value)) {
+        break;
+      }
+    }
+
+    if (i >= length) {
+      return false;
+    }
+
+    --length;
+    for (; i < length; ++i) {
+      this[i] = this[i + 1];
+    }
+
+    this._length = length;
+
+    delete this[this._length];
+
+    return true;
+  }
+
+  public removeAll(value: T): number {
+    const length = this._length;
+    let i = 0;
+    for (let j = 0; j < length; ++j) {
+      if (!sameValueZero(this[j], value)) {
+        if (i < j) {
+          this[i] = this[j];
+        }
+
+        ++i;
+      }
+    }
+
+    this._length = i;
+
+    for (; i < length; ++i) {
+      delete this[i];
+    }
+
+    return length - this._length;
+  }
+
+  public removeIf(predicate: (value: T, index: number, list: List<T>) => boolean): List<T> {
+    const removedElements = new List<T>();
+
+    const length = this._length;
+    let i = 0;
+    for (let j = 0; j < length; ++j) {
+      if (predicate(this[j], j, this)) {
+        removedElements.append(this[j]);
+      } else {
+        if (i < j) {
+          this[i] = this[j];
+        }
+
+        ++i;
+      }
+    }
+
+    this._length = i;
+
+    for (; i < length; ++i) {
+      delete this[i];
+    }
+
+    return removedElements;
+  }
+
   public fill(value: T, start?: number | undefined, end?: number | undefined): this {
     start = start === undefined ? 0 : List.toAbsoluteIndex(start, this._length);
     if (start >= this._length) {
@@ -686,6 +759,50 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
 
   public toSorted(compareFn?: Comparer<T> | undefined): List<T> {
     return this.clone().sort(compareFn);
+  }
+
+  public distinct(): List<T> {
+    const r = new List<T>();
+
+    const length = this._length;
+    for (let i = 0; i < length; ++i) {
+      let j = 0;
+      for (; j < i; ++j) {
+        if (sameValueZero(this[i], this[j])) {
+          break;
+        }
+      }
+
+      if (j >= i) {
+        r.append(this[i]);
+      }
+    }
+
+    return r;
+  }
+
+  public distinctBy<U>(selector: (value: T) => U): List<T> {
+    const r = new List<T>();
+    const s = new List<U>();
+
+    const length = this._length;
+    for (let i = 0; i < length; ++i) {
+      const value = selector(this[i]);
+      s.append(value);
+
+      let j = 0;
+      for (; j < i; ++j) {
+        if (sameValueZero(value, s[j])) {
+          break;
+        }
+      }
+
+      if (j >= i) {
+        r.append(this[i]);
+      }
+    }
+
+    return r;
   }
 
   public join(separator?: string | undefined): string {

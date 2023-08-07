@@ -98,7 +98,7 @@ function equals(a: any, b: any): boolean {
     return plainObjectEquals(a, b);
   }
 
-  throw new TypeError(`Can't evaluate equality between types ${typeOf(a)} and ${typeOf(b)}`);
+  return false;
 }
 
 export function expectToEqual(actual: any, expected: any): void {
