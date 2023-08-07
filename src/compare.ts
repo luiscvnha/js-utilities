@@ -5,11 +5,7 @@ export class Compare {
   private constructor() {}
 
 
-  public static asStrings(
-    order: Order = Order.Ascending,
-    locales?: string | string[] | undefined,
-    options?: Intl.CollatorOptions | undefined
-  ): Comparer<any> {
+  public static asStrings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<any> {
     const collator = new Intl.Collator(locales, options);
 
     return order === Order.Ascending
@@ -21,11 +17,7 @@ export class Compare {
       };
   }
 
-  public static strings(
-    order: Order = Order.Ascending,
-    locales?: string | string[] | undefined,
-    options?: Intl.CollatorOptions | undefined
-  ): Comparer<string> {
+  public static strings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<string> {
     const collator = new Intl.Collator(locales, options);
 
     return order === Order.Ascending
