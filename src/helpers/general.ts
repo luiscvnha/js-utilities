@@ -19,6 +19,7 @@ export function isNullishOrWhitespace(value: any): value is null | undefined | "
 }
 
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness#same-value-zero_equality
 export function sameValueZero(x: any, y: any): boolean {
   if (typeof x === "number" && typeof y === "number") {
     return x === y || (x !== x && y !== y);
