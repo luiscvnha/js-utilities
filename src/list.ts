@@ -943,7 +943,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexab
   private quickSort(left: number, right: number, compareFn: Comparer<T>): void {
     let index;
 
-    if (this.length > 1) {
+    if (this._length > 1) {
       index = this.partition(left, right, compareFn);
 
       if (left < index - 1) {
