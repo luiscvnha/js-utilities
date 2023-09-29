@@ -18,7 +18,7 @@ type FlattenList<Type, Depth extends number> = [
 ][Depth extends -1 ? 0 : 1];
 
 
-export class List<T = any> implements Iterable<T>, ArrayLike<T>, RelativeIndexable<T> {
+export class List<T = any> implements Iterable<T>, ArrayLike<T> {
   [index: number]: T;
 
   private _length: number;
