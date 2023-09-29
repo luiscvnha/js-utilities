@@ -1,4 +1,4 @@
-import { ToLocaleStringOptions, Comparer } from "./common";
+import { ToLocaleStringOptions, Comparer } from "../common";
 import {
   getLocaleStringifier,
   isArrayLike,
@@ -6,8 +6,8 @@ import {
   isIterable,
   join,
   sameValueZero
-} from "./helpers";
-import { Compare } from "./compare";
+} from "../helpers";
+import { Compare } from "../compare";
 
 
 type FlattenList<Type, Depth extends number> = [

@@ -1,18 +1,17 @@
-import { PromiseState, XPromise } from "../../src/xpromise";
+import { PromiseState, DeferredXPromise } from "../../src/xpromises";
 
 
-describe("Testing XPromise", () => {
+describe("Testing DeferredXPromise", () => {
 
   test("State when unsettled", () => {
-    const p = new XPromise(() => {});
+    const p = new DeferredXPromise();
 
     expect(p.state).toBe(PromiseState.Pending);
   });
 
   test("State when resolving synchronously", () => {
-    const p = new XPromise((resolve) => {
-      resolve();
-    });
+    const p = new DeferredXPromise();
+    p.resolve();
 
     expect(p.state).toBe(PromiseState.Fulfilled);
 
@@ -22,9 +21,8 @@ describe("Testing XPromise", () => {
   });
 
   test("State when rejecting synchronously", () => {
-    const p = new XPromise((resolve, reject) => {
-      reject();
-    });
+    const p = new DeferredXPromise();
+    p.reject();
 
     expect(p.state).toBe(PromiseState.Rejected);
 
@@ -34,10 +32,9 @@ describe("Testing XPromise", () => {
   });
 
   test("State when resolving asynchronously", () => {
-    const p = new XPromise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      });
+    const p = new DeferredXPromise();
+    setTimeout(() => {
+      p.resolve();
     });
 
     expect(p.state).toBe(PromiseState.Pending);
@@ -48,10 +45,9 @@ describe("Testing XPromise", () => {
   });
 
   test("State when rejecting asynchronously", () => {
-    const p = new XPromise((resolve, reject) => {
-      setTimeout(() => {
-        reject();
-      });
+    const p = new DeferredXPromise();
+    setTimeout(() => {
+      p.reject();
     });
 
     expect(p.state).toBe(PromiseState.Pending);

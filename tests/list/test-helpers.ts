@@ -1,5 +1,5 @@
-import { typeOf } from "../src/helpers";
-import { List } from "../src/list";
+import { typeOf } from "../../src/helpers";
+import { List } from "../../src/list";
 
 
 function isListOrArray(x: any): x is List<any> | any[] {

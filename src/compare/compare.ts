@@ -1,4 +1,4 @@
-import { Comparer, Order } from "./common";
+import { Comparer, Order } from "../common";
 
 
 export const Compare = Object.freeze({

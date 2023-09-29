@@ -1,5 +1,5 @@
-import { ToLocaleStringOptions } from "./common";
-import { getLocaleStringifier, join, sameValueZero } from "./helpers";
+import { ToLocaleStringOptions } from "../common";
+import { getLocaleStringifier, join, sameValueZero } from "../helpers";
 
 
 export class Queue<T = any> implements Iterable<T> {

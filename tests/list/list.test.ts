@@ -1,6 +1,6 @@
-import { List } from "../src/list";
-import { Compare } from "../src/compare";
-import { expectToEqual } from "./list.test.helpers";
+import { List } from "../../src/list";
+import { Compare } from "../../src/compare";
+import { expectToEqual } from "./test-helpers";
 
 
 describe("Testing List", () => {
