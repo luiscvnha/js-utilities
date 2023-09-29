@@ -27,5 +27,8 @@
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/explicit-member-accessibility": "error"
   },
-  "ignorePatterns": ["dist/**/*"]
+  "ignorePatterns": [
+    "dist/**/*",
+    "jest.config.js"
+  ]
 }

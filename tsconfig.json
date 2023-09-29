@@ -1,26 +1,10 @@
 {
   "compileOnSave": false,
+  "include": [
+    "src/**/*"
+  ],
   "compilerOptions": {
-    "outDir": "dist",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "es2020",
-    "module": "CommonJS",
-    "esModuleInterop": true,
-    "lib": [
-      "es2021",
-      "dom"
-    ],
     "alwaysStrict": true,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": true,
@@ -31,20 +15,39 @@
     "noUncheckedIndexedAccess": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
+    "module": "UMD",
+    "moduleResolution": "Node10",
+    "rootDir": "src",
+    "types": [
+      "jest"
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
     "newLine": "lf",
+    "outDir": "dist",
     "preserveConstEnums": false,
     "removeComments": true,
+    "sourceMap": true,
     "allowJs": false,
     "plugins": [
       { "name": "typescript-eslint-language-service" }
     ],
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "pretty": true
-  },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ]
+    "experimentalDecorators": true,
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "target": "ES6",
+  }
 }
