@@ -23,7 +23,7 @@ describe("Testing arrays helpers", () => {
     expect(isIterable(NaN)).toBe(false);
     expect(isIterable(Infinity)).toBe(false);
     expect(isIterable(new Number(0))).toBe(false);
-    expect(isIterable(0n)).toBe(false);
+    expect(isIterable(BigInt(0))).toBe(false);
     expect(isIterable(true)).toBe(false);
     expect(isIterable(false)).toBe(false);
     expect(isIterable(new Boolean(true))).toBe(false);
@@ -55,7 +55,7 @@ describe("Testing arrays helpers", () => {
     expect(isAsyncIterable(NaN)).toBe(false);
     expect(isAsyncIterable(Infinity)).toBe(false);
     expect(isAsyncIterable(new Number(0))).toBe(false);
-    expect(isAsyncIterable(0n)).toBe(false);
+    expect(isAsyncIterable(BigInt(0))).toBe(false);
     expect(isAsyncIterable(true)).toBe(false);
     expect(isAsyncIterable(false)).toBe(false);
     expect(isAsyncIterable(new Boolean(true))).toBe(false);
@@ -86,7 +86,7 @@ describe("Testing arrays helpers", () => {
     expect(isArrayLike(NaN)).toBe(false);
     expect(isArrayLike(Infinity)).toBe(false);
     expect(isArrayLike(new Number(0))).toBe(false);
-    expect(isArrayLike(0n)).toBe(false);
+    expect(isArrayLike(BigInt(0))).toBe(false);
     expect(isArrayLike(true)).toBe(false);
     expect(isArrayLike(false)).toBe(false);
     expect(isArrayLike(new Boolean(true))).toBe(false);

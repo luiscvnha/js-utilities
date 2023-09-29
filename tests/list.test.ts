@@ -1,6 +1,6 @@
-import { expectToEqual } from "./list.test.helpers";
 import { List } from "../src/list";
 import { Compare } from "../src/compare";
+import { expectToEqual } from "./list.test.helpers";
 
 
 describe("Testing List", () => {
@@ -1234,7 +1234,8 @@ describe("Testing List", () => {
     );
 
     // #7
-    function func(...a: any[]) {
+    function func(...args: any[]) {
+      void args;
       // eslint-disable-next-line prefer-rest-params
       return List.from(arguments);
     }
