@@ -72,6 +72,6 @@ export function expectToEqual(actual: any, expected: any): void {
     expectPlainObjectToEqual(actual, expected);
   }
   else {
-    throw new Error();
+    throw new Error("Arguments' types are incompatible");
   }
 }
