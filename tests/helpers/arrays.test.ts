@@ -1,8 +1,8 @@
-import { isArrayLike, isIterable, isAsyncIterable, join } from "../../src/helpers";
+import { isArrayLike, isIterable, isAsyncIterable } from "../../src/helpers";
 import { List } from "../../src/list";
 
 
-describe("Testing arrays helpers", () => {
+describe("Testing array helpers", () => {
 
   test("isIterable", () => {
     expect(isIterable([])).toBe(true);
@@ -99,36 +99,6 @@ describe("Testing arrays helpers", () => {
     expect(isArrayLike(new Object())).toBe(false);
     expect(isArrayLike(new Map<any, any>())).toBe(false);
     expect(isArrayLike(new Set<any>())).toBe(false);
-  });
-
-  test("join", () => {
-    const arrayLike: ArrayLike<number> = {
-      0: 1,
-      1: 2,
-      2: 3,
-      length: 3
-    };
-
-    const iterable: Iterable<number> = {
-      [Symbol.iterator]: function() {
-        let index = 0;
-        const length = arrayLike.length;
-
-        return {
-          next: function() {
-            return index < length
-              ? { value: arrayLike[index++], done: false }
-              : { value: undefined, done: true };
-          }
-        };
-      }
-    };
-
-    expect(join(arrayLike, ", ", String)).toBe("1, 2, 3");
-    expect(join(arrayLike, "", String)).toBe("123");
-
-    expect(join(iterable, ", ", String)).toBe("1, 2, 3");
-    expect(join(iterable, "", String)).toBe("123");
   });
 
 });

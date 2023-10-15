@@ -15,7 +15,19 @@
   "bugs": {
     "url": "https://github.com/luiscvnha/js-utilities/issues"
   },
-  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./common": "./dist/common/index.js",
+    "./compare": "./dist/compare/index.js",
+    "./helpers": "./dist/helpers/index.js",
+    "./lazy": "./dist/lazy/index.js",
+    "./list": "./dist/list/index.js",
+    "./property-retriever": "./dist/property-retriever/index.js",
+    "./queue": "./dist/queue/index.js",
+    "./stack": "./dist/stack/index.js",
+    "./xpromises": "./dist/xpromises/index.js"
+  },
   "files": [
     "dist/**/*"
   ],

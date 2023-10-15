@@ -1,12 +1,6 @@
 import { ToLocaleStringOptions, Comparer } from "../common";
-import {
-  getLocaleStringifier,
-  isArrayLike,
-  isAsyncIterable,
-  isIterable,
-  join,
-  sameValueZero
-} from "../helpers";
+import { isArrayLike, isAsyncIterable, isIterable, sameValueZero } from "../helpers";
+import { getLocaleStringifier, join } from "../internal";
 import { Compare } from "../compare";
 
 
