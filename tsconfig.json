@@ -30,7 +30,7 @@
     "declaration": true,
     "declarationMap": true,
     "downlevelIteration": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "newLine": "lf",
     "outDir": "dist",
     "preserveConstEnums": false,
@@ -48,6 +48,6 @@
       "ES2022",
       "DOM"
     ],
-    "target": "ES6",
+    "target": "ES6"
   }
 }
