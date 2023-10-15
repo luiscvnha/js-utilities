@@ -21,8 +21,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
-    "module": "UMD",
-    "moduleResolution": "Node10",
+    "module": "CommonJS",
     "rootDir": "src",
     "types": [
       "jest"
