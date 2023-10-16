@@ -29,6 +29,7 @@
   },
   "ignorePatterns": [
     "dist/**/*",
-    "jest.config.js"
+    "jest.config.js",
+    "webpack.config.js"
   ]
 }

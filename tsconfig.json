@@ -21,7 +21,9 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
-    "module": "CommonJS",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": false,
     "rootDir": "src",
     "types": [
       "jest"
@@ -47,6 +49,6 @@
       "ES2022",
       "DOM"
     ],
-    "target": "ES6"
+    "target": "ES6",
   }
 }

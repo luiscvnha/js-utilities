@@ -6,8 +6,8 @@ const config = {
   testEnvironment: "node",
   testRegex: "/tests/.+\\.test\\.ts$",
   moduleFileExtensions: [
-    "ts", "js"
-  ]
+    "ts", "js",
+  ],
 };
 
 module.exports = config;
