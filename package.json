@@ -2,6 +2,14 @@
   "name": "@luiscvnha/js-utilities",
   "version": "1.0.0",
   "description": "JavaScript/TypeScript utilities",
+  "keywords": [
+    "javascript",
+    "typescript",
+    "node",
+    "browser",
+    "library",
+    "util"
+  ],
   "homepage": "https://github.com/luiscvnha/js-utilities",
   "author": {
     "name": "Luís Cunha",
