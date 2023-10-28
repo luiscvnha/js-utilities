@@ -104,10 +104,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
   public remove(value: T): boolean {
     let length = this._length;
     let i = 0;
-    for (; i < length; ++i) {
-      if (sameValueZero(this[i], value)) {
-        break;
-      }
+    while (i < length && !sameValueZero(this[i], value)) {
+      ++i;
     }
 
     if (i >= length) {
@@ -446,9 +444,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     let i = 0;
     let accumulator: T = initialValue !== undefined ? initialValue : this[i++];
 
-    while (i < length) {
+    for (; i < length; ++i) {
       accumulator = callbackFn(accumulator, this[i], i, this);
-      ++i;
     }
 
     return accumulator;
@@ -465,9 +462,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     let i = this._length - 1;
     let accumulator: T = initialValue !== undefined ? initialValue : this[i--];
 
-    while (i >= 0) {
+    for (; i >= 0; --i) {
       accumulator = callbackFn(accumulator, this[i], i, this);
-      --i;
     }
 
     return accumulator;
@@ -527,9 +523,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     let i = 0;
-    while (i < length) {
+    for (; i < length; ++i) {
       r[i] = callbackFn(this[i], i, this);
-      ++i;
     }
 
     r._length = i;
@@ -676,9 +671,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     const r = new List<T>();
 
     let i = 0;
-    while (i < start) {
+    for (; i < start; ++i) {
       r[i] = this[i];
-      ++i;
     }
 
     const itemsLength = items.length;
@@ -761,10 +755,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     const length = this._length;
     for (let i = 0; i < length; ++i) {
       let j = 0;
-      for (; j < i; ++j) {
-        if (sameValueZero(this[i], this[j])) {
-          break;
-        }
+      while (j < i && !sameValueZero(this[i], this[j])) {
+        ++j;
       }
 
       if (j >= i) {
@@ -785,10 +777,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
       s.append(value);
 
       let j = 0;
-      for (; j < i; ++j) {
-        if (sameValueZero(value, s[j])) {
-          break;
-        }
+      while (j < i && !sameValueZero(value, s[j])) {
+        ++j;
       }
 
       if (j >= i) {
@@ -849,9 +839,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     else if (isArrayLike<T>(iterable)) {
       const length = iterable.length;
       let i = 0;
-      while (i < length) {
+      for (; i < length; ++i) {
         r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
-        ++i;
       }
 
       r._length = i;
@@ -893,10 +882,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     else if (isArrayLike<T>(iterable)) {
       const length = iterable.length;
       let i = 0;
-      while (i < length) {
+      for (; i < length; ++i) {
         const value = await iterable[i];
         r[i] = mapFn !== undefined ? await mapFn(value, i) : value;
-        ++i;
       }
 
       r._length = i;
@@ -920,9 +908,8 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     const r = new List<T>();
 
     let i = 0;
-    while (i < count) {
+    for (; i < count; ++i) {
       r[i] = value;
-      ++i;
     }
 
     r._length = i;
@@ -935,18 +922,18 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
 
 
   private quickSort(left: number, right: number, compareFn: Comparer<T>): void {
-    let index;
+    if (this._length <= 1) {
+      return;
+    }
 
-    if (this._length > 1) {
-      index = this.partition(left, right, compareFn);
+    const index = this.partition(left, right, compareFn);
 
-      if (left < index - 1) {
-        this.quickSort(left, index - 1, compareFn);
-      }
+    if (left < index - 1) {
+      this.quickSort(left, index - 1, compareFn);
+    }
 
-      if (index < right) {
-        this.quickSort(index, right, compareFn);
-      }
+    if (index < right) {
+      this.quickSort(index, right, compareFn);
     }
   }
 
@@ -1000,10 +987,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
       target += count - 1;
     }
 
-    while (count > 0) {
+    for (; count > 0; --count) {
       this[target] = this[start];
 
-      --count;
       target += inc;
       start += inc;
     }
