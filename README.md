@@ -30,7 +30,7 @@ const l = new List();
 ```ts
 import { List /*, ...*/ } from "@luiscvnha/js-utilities";
 
-const l = new List();
+const l = new List<string>();
 // ...
 ```
 
