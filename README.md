@@ -2,6 +2,10 @@
 
 JavaScript/TypeScript utilities written in TypeScript.
 
+[Docs](https://github.com/luiscvnha/js-utilities/wiki)
+
+[Changelog](https://github.com/luiscvnha/js-utilities/releases)
+
 ## Install
 ```
 npm i @luiscvnha/js-utilities
@@ -42,5 +46,3 @@ const l = new List<string>();
   // ...
 </script>
 ```
-
-## [Docs](https://github.com/luiscvnha/js-utilities/wiki)
