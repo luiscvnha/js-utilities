@@ -32,12 +32,12 @@ export function clamp(value: number, min: number, max: number): number {
 
 
 // https://stackoverflow.com/a/19722641
-export function round(value: number, decimals: number = 0): number {
-  if (decimals < 0 || decimals > 100) {
+export function round(value: number, digits: number = 0): number {
+  if (digits < 0 || digits > 100) {
     throw new RangeError("decimals must be a number between 0 and 100");
   }
 
-  if (Number.isNaN(value) || Number.isNaN(decimals)) {
+  if (Number.isNaN(value) || Number.isNaN(digits)) {
     return NaN;
   }
 
@@ -45,11 +45,11 @@ export function round(value: number, decimals: number = 0): number {
     return value;
   }
 
-  decimals = Math.trunc(decimals);
+  digits = Math.trunc(digits);
 
-  let r: any = `${value}e+${decimals}`;
+  let r: any = `${value}e+${digits}`;
   r = Math.round(r);
-  r = `${r}e-${decimals}`;
+  r = `${r}e-${digits}`;
 
   return Number(r);
 }
