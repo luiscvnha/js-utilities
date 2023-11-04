@@ -29,3 +29,27 @@ export function clamp(value: number, min: number, max: number): number {
 
   return Math.max(Math.min(value, max), min);
 }
+
+
+// https://stackoverflow.com/a/19722641
+export function round(value: number, decimals: number = 0): number {
+  if (decimals < 0 || decimals > 100) {
+    throw new RangeError("decimals must be a number between 0 and 100");
+  }
+
+  if (Number.isNaN(value) || Number.isNaN(decimals)) {
+    return NaN;
+  }
+
+  if (value === Infinity || value === -Infinity) {
+    return value;
+  }
+
+  decimals = Math.trunc(decimals);
+
+  let r: any = `${value}e+${decimals}`;
+  r = Math.round(r);
+  r = `${r}e-${decimals}`;
+
+  return Number(r);
+}

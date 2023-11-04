@@ -1,4 +1,4 @@
-import { mod, clamp } from "../../src/helpers";
+import { mod, clamp, round } from "../../src/helpers";
 
 
 describe("Testing math helpers", () => {
@@ -105,6 +105,52 @@ describe("Testing math helpers", () => {
     expect(clamp(NaN,   0,   4)).toBeNaN();
     expect(clamp(  2, NaN,   4)).toBeNaN();
     expect(clamp(  2,   0, NaN)).toBeNaN();
+  });
+
+  test("round", () => {
+    expect(round(     10, 2)).toBe(  10);
+    expect(round( 1.7777, 2)).toBe(1.78);
+    expect(round(  1.005, 2)).toBe(1.01);
+    expect(round(  1.005, 0)).toBe(   1);
+    expect(round(1.77777, 1)).toBe( 1.8);
+
+    expect(round(-Infinity,   0)).toBe(-Infinity);
+    expect(round(-Infinity,   1)).toBe(-Infinity);
+    expect(round(-Infinity,  99)).toBe(-Infinity);
+    expect(round(-Infinity, 100)).toBe(-Infinity);
+    expect(round( Infinity,   0)).toBe( Infinity);
+    expect(round( Infinity,   1)).toBe( Infinity);
+    expect(round( Infinity,  99)).toBe( Infinity);
+    expect(round( Infinity, 100)).toBe( Infinity);
+
+    expect(() => round(      NaN, -Infinity)).toThrow(RangeError);
+    expect(() => round(-Infinity, -Infinity)).toThrow(RangeError);
+    expect(() => round(       -2, -Infinity)).toThrow(RangeError);
+    expect(() => round(        0, -Infinity)).toThrow(RangeError);
+    expect(() => round(        2, -Infinity)).toThrow(RangeError);
+    expect(() => round( Infinity, -Infinity)).toThrow(RangeError);
+    expect(() => round(      NaN,        -1)).toThrow(RangeError);
+    expect(() => round(-Infinity,        -1)).toThrow(RangeError);
+    expect(() => round(       -2,        -1)).toThrow(RangeError);
+    expect(() => round(        0,        -1)).toThrow(RangeError);
+    expect(() => round(        2,        -1)).toThrow(RangeError);
+    expect(() => round( Infinity,        -1)).toThrow(RangeError);
+    expect(() => round(      NaN,       101)).toThrow(RangeError);
+    expect(() => round(-Infinity,       101)).toThrow(RangeError);
+    expect(() => round(       -2,       101)).toThrow(RangeError);
+    expect(() => round(        0,       101)).toThrow(RangeError);
+    expect(() => round(        2,       101)).toThrow(RangeError);
+    expect(() => round( Infinity,       101)).toThrow(RangeError);
+    expect(() => round(      NaN,  Infinity)).toThrow(RangeError);
+    expect(() => round(-Infinity,  Infinity)).toThrow(RangeError);
+    expect(() => round(       -2,  Infinity)).toThrow(RangeError);
+    expect(() => round(        0,  Infinity)).toThrow(RangeError);
+    expect(() => round(        2,  Infinity)).toThrow(RangeError);
+    expect(() => round( Infinity,  Infinity)).toThrow(RangeError);
+
+    expect(round(  NaN, NaN)).toBeNaN();
+    expect(round(  NaN,   2)).toBeNaN();
+    expect(round(1.234, NaN)).toBeNaN();
   });
 
 });
