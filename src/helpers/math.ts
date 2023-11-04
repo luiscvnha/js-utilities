@@ -1,6 +1,14 @@
 // https://stackoverflow.com/a/4467559
 export function mod(value: number, modulo: number): number {
-  if (!Number.isFinite(value) || !Number.isFinite(modulo) || modulo < 1) {
+  if (value === Infinity || value === -Infinity) {
+    throw new RangeError("value must be a finite number");
+  }
+
+  if (modulo < 1 || modulo === Infinity) {
+    throw new RangeError("modulo must be a finite number greater than or equal to 1");
+  }
+
+  if (Number.isNaN(value) || Number.isNaN(modulo)) {
     return NaN;
   }
 
@@ -11,7 +19,11 @@ export function mod(value: number, modulo: number): number {
 
 
 export function clamp(value: number, min: number, max: number): number {
-  if (Number.isNaN(value) || Number.isNaN(min) || Number.isNaN(max) || min > max) {
+  if (min > max) {
+    throw new RangeError("max must be greater than or equal to min");
+  }
+
+  if (Number.isNaN(value) || Number.isNaN(min) || Number.isNaN(max)) {
     return NaN;
   }
 
