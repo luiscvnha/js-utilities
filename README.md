@@ -23,7 +23,7 @@ const l = new List();
 
 ### Node.js with `"type": "module"`
 ```js
-import utilities from '@luiscvnha/js-utilities';
+import utilities from "@luiscvnha/js-utilities";
 const { List /*, ...*/ } = utilities;
 
 const l = new List();
