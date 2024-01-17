@@ -6,3 +6,7 @@ export enum Order {
   Ascending,
   Descending
 }
+
+export interface Ref<T> {
+  value: T;
+}
