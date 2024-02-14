@@ -1,6 +1,7 @@
 const path = require("path");
 
-module.exports = {
+/** @type {import("webpack").Configuration} */
+const config = {
   mode: "production",
   entry: "./src/index.ts",
   output: {
@@ -19,7 +20,12 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: "ts-loader",
+        use: {
+          loader: "ts-loader",
+          options: {
+            configFile: "tsconfig.src.json",
+          },
+        },
         exclude: /node_modules/,
       },
     ],
@@ -28,3 +34,5 @@ module.exports = {
     extensions: [".ts", ".js"],
   },
 };
+
+module.exports = config;

@@ -1,54 +1,40 @@
 {
   "compileOnSave": false,
-  "include": [
-    "src/**/*"
-  ],
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES6",
+    "plugins": [
+      { "name": "typescript-eslint-language-service" },
+    ],
+    "newLine": "lf",
+    "resolveJsonModule": false,
+    "downlevelIteration": true,
+    "importHelpers": false,
+    "preserveConstEnums": false,
+    "removeComments": true,
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    // Rules
     "alwaysStrict": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noPropertyAccessFromIndexSignature": true,
+    "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "strict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
     "useUnknownInCatchVariables": true,
-    "module": "ES2022",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": false,
-    "rootDir": "src",
-    "types": [
-      "jest"
-    ],
-    "declaration": true,
-    "declarationMap": true,
-    "downlevelIteration": true,
-    "importHelpers": false,
-    "newLine": "lf",
-    "outDir": "dist",
-    "preserveConstEnums": false,
-    "removeComments": true,
-    "sourceMap": true,
-    "allowJs": false,
-    "plugins": [
-      { "name": "typescript-eslint-language-service" }
-    ],
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "experimentalDecorators": true,
-    "lib": [
-      "ES2022",
-      "DOM"
-    ],
-    "target": "ES6",
   }
 }
