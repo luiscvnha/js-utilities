@@ -10,7 +10,7 @@ const config = {
     clean: true,
     globalObject: "this",
     library: {
-      name: "utilities",
+      name: "jsUtilities",
       type: "umd",
       umdNamedDefine: true,
     },
