@@ -1,60 +1,22 @@
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties#obtaining_properties_by_enumerabilityownership
-export const PropertyRetriever = Object.freeze({
-  getOwnEnumerable(obj: object): string[] {
-    return Object.keys(obj);
-  },
-
-  getOwnNonEnumerable(obj: object): string[] {
-    return _getPropertyNames(obj, true, false, _nonEnumerable);
-  },
-
-  getOwn(obj: object): string[] {
-    return Object.getOwnPropertyNames(obj);
-  },
-
-  getInheritedEnumerable(obj: object): string[] {
-    return _getPropertyNames(obj, false, true, _enumerable);
-  },
-
-  getInheritedNonEnumerable(obj: object): string[] {
-    return _getPropertyNames(obj, false, true, _nonEnumerable);
-  },
-
-  getInherited(obj: object): string[] {
-    return _getPropertyNames(obj, false, true, _enumerableAndNonEnumerable);
-  },
-
-  getEnumerable(obj: object): string[] {
-    const props: string[] = [];
-    for (const prop in obj) {
-      props.push(prop);
-    }
-    return props;
-  },
-
-  getNonEnumerable(obj: object): string[] {
-    return _getPropertyNames(obj, true, true, _nonEnumerable);
-  },
-
-  getAll(obj: object): string[] {
-    return _getPropertyNames(obj, true, true, _enumerableAndNonEnumerable);
-  }
-});
 
 
-function _enumerable(obj: object, prop: string): boolean {
+function enumerable(obj: object, prop: string): boolean {
   return Object.prototype.propertyIsEnumerable.call(obj, prop);
 }
 
-function _nonEnumerable(obj: object, prop: string): boolean {
+
+function nonEnumerable(obj: object, prop: string): boolean {
   return !Object.prototype.propertyIsEnumerable.call(obj, prop);
 }
 
-function _enumerableAndNonEnumerable(): boolean {
+
+function enumerableAndNonEnumerable(): boolean {
   return true;
 }
 
-function _getPropertyNames(obj: object, iterateSelf: boolean, iteratePrototype: boolean, includeProp: (obj: object, prop: string) => boolean): string[] {
+
+function getPropertyNames(obj: object, iterateSelf: boolean, iteratePrototype: boolean, includeProp: (obj: object, prop: string) => boolean): string[] {
   const props: string[] = [];
 
   do {
@@ -75,4 +37,53 @@ function _getPropertyNames(obj: object, iterateSelf: boolean, iteratePrototype: 
   } while (obj);
 
   return props;
+}
+
+
+export function getOwnEnumerable(obj: object): string[] {
+  return Object.keys(obj);
+}
+
+
+export function getOwnNonEnumerable(obj: object): string[] {
+  return getPropertyNames(obj, true, false, nonEnumerable);
+}
+
+
+export function getOwn(obj: object): string[] {
+  return Object.getOwnPropertyNames(obj);
+}
+
+
+export function getInheritedEnumerable(obj: object): string[] {
+  return getPropertyNames(obj, false, true, enumerable);
+}
+
+
+export function getInheritedNonEnumerable(obj: object): string[] {
+  return getPropertyNames(obj, false, true, nonEnumerable);
+}
+
+
+export function getInherited(obj: object): string[] {
+  return getPropertyNames(obj, false, true, enumerableAndNonEnumerable);
+}
+
+
+export function getEnumerable(obj: object): string[] {
+  const props: string[] = [];
+  for (const prop in obj) {
+    props.push(prop);
+  }
+  return props;
+}
+
+
+export function getNonEnumerable(obj: object): string[] {
+  return getPropertyNames(obj, true, true, nonEnumerable);
+}
+
+
+export function getAll(obj: object): string[] {
+  return getPropertyNames(obj, true, true, enumerableAndNonEnumerable);
 }

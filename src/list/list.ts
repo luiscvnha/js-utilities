@@ -1,7 +1,12 @@
-import { ToLocaleStringOptions, Comparer } from "../common";
-import { isArrayLike, isAsyncIterable, isIterable, sameValueZero } from "../helpers";
-import { getLocaleStringifier, join } from "../internal";
-import { Compare } from "../compare";
+import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import type { Comparer } from "../compare/comparer";
+import { isArrayLike } from "../common/type-checks/is-array-like";
+import { isAsyncIterable } from "../common/type-checks/is-async-iterable";
+import { isIterable } from "../common/type-checks/is-iterable";
+import { sameValueZero } from "../helpers/same-value-zero";
+import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
+import { join } from "../__internal__/join";
+import { asStrings as compareAsStrings } from "../compare/compare";
 
 
 type FlattenList<Type, Depth extends number> = [
@@ -12,7 +17,7 @@ type FlattenList<Type, Depth extends number> = [
 ][Depth extends -1 ? 0 : 1];
 
 
-export class List<T = any> implements Iterable<T>, ArrayLike<T> {
+export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
   [index: number]: T;
 
   private _length: number;
@@ -325,9 +330,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     };
   }
 
-  public all<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: any): this is List<S>;
-  public all(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): boolean;
-  public all(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): boolean {
+  public all<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: unknown): this is List<S>;
+  public all(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): boolean;
+  public all(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): boolean {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -342,7 +347,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return true;
   }
 
-  public some(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): boolean {
+  public some(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): boolean {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -357,9 +362,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return false;
   }
 
-  public find<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: any): S | undefined;
-  public find(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): T | undefined;
-  public find(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): T | undefined {
+  public find<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: unknown): S | undefined;
+  public find(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): T | undefined;
+  public find(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): T | undefined {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -374,9 +379,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return undefined;
   }
 
-  public findLast<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: any): S | undefined;
-  public findLast(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): T | undefined;
-  public findLast(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): T | undefined {
+  public findLast<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: unknown): S | undefined;
+  public findLast(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): T | undefined;
+  public findLast(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): T | undefined {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -390,7 +395,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return undefined;
   }
 
-  public findIndex(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): number | undefined {
+  public findIndex(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): number | undefined {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -405,7 +410,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return undefined;
   }
 
-  public findLastIndex(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): number | undefined {
+  public findLastIndex(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): number | undefined {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
@@ -419,7 +424,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return undefined;
   }
 
-  public forEach(callbackFn: (value: T, index: number, list: List<T>) => void, thisArg?: any): this {
+  public forEach(callbackFn: (value: T, index: number, list: List<T>) => void, thisArg?: unknown): this {
     if (thisArg !== undefined) {
       callbackFn = callbackFn.bind(thisArg);
     }
@@ -492,10 +497,10 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public filter<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: any): List<S>;
-  public filter(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): List<T>;
-  public filter(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: any): List<T> {
-    const r = new List();
+  public filter<S extends T>(predicate: (value: T, index: number, list: List<T>) => value is S, thisArg?: unknown): List<S>;
+  public filter(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): List<T>;
+  public filter(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): List<T> {
+    const r = new List<T>();
     let i = 0;
 
     if (thisArg !== undefined) {
@@ -514,7 +519,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public map<U>(callbackFn: (value: T, index: number, list: List<T>) => U, thisArg?: any): List<U> {
+  public map<U>(callbackFn: (value: T, index: number, list: List<T>) => U, thisArg?: unknown): List<U> {
     const r = new List<U>();
 
     if (thisArg !== undefined) {
@@ -547,7 +552,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public flatMap<U>(callbackFn: (value: T, index: number, list: List<T>) => U | List<U>, thisArg?: any): List<U> {
+  public flatMap<U>(callbackFn: (value: T, index: number, list: List<T>) => U | List<U>, thisArg?: unknown): List<U> {
     if (thisArg !== undefined) {
       callbackFn = callbackFn.bind(thisArg);
     }
@@ -567,7 +572,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public group<P extends string | symbol>(callbackFn: (value: T, index: number, list: List<T>) => P, thisArg?: any): Partial<Record<P, List<T>>> {
+  public group<P extends string | symbol>(callbackFn: (value: T, index: number, list: List<T>) => P, thisArg?: unknown): Partial<Record<P, List<T>>> {
     const r: Partial<Record<P, List<T>>> = {};
 
     if (thisArg !== undefined) {
@@ -588,7 +593,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public groupToMap<P>(callbackFn: (value: T, index: number, list: List<T>) => P, thisArg?: any): Map<P, List<T>> {
+  public groupToMap<P>(callbackFn: (value: T, index: number, list: List<T>) => P, thisArg?: unknown): Map<P, List<T>> {
     const r = new Map<P, List<T>>();
 
     if (thisArg !== undefined) {
@@ -740,7 +745,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
   }
 
   public sort(compareFn?: Comparer<T> | undefined): this {
-    compareFn ??= Compare.asStrings();
+    compareFn ??= compareAsStrings();
     this.quickSort(0, this._length - 1, compareFn);
     return this;
   }
@@ -814,9 +819,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
 
 
   public static from<T>(iterable: Iterable<T> | ArrayLike<T>): List<T>;
-  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: any): List<U>;
-  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): List<T> | List<U> {
-    const r = new List();
+  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn: (value: T, index: number) => U, thisArg?: unknown): List<U>;
+  public static from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: unknown): List<T> | List<U> {
+    const r = new List<any>();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
@@ -853,9 +858,9 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
   }
 
   public static async fromAsync<T>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>): Promise<List<T>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn: (value: T, index: number) => U, thisArg?: any): Promise<List<U>>;
-  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: any): Promise<List<T> | List<U>> {
-    const r = new List();
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn: (value: T, index: number) => U, thisArg?: unknown): Promise<List<U>>;
+  public static async fromAsync<T, U>(iterable: AsyncIterable<T | Promise<T>> | Iterable<T | Promise<T>> | ArrayLike<T | Promise<T>>, mapFn?: ((value: T, index: number) => U) | undefined, thisArg?: unknown): Promise<List<T> | List<U>> {
+    const r = new List<any>();
 
     if (mapFn !== undefined && thisArg !== undefined) {
       mapFn = mapFn.bind(thisArg);
@@ -938,7 +943,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
   }
 
   private partition(left: number, right: number, compareFn: Comparer<T>): number {
-    const pivot = this[Math.floor((right + left) / 2)];
+    const pivot = this[Math.floor((left + right) / 2)];
     let i = left;
     let j = right;
 
@@ -1015,7 +1020,7 @@ export class List<T = any> implements Iterable<T>, ArrayLike<T> {
       : Math.min(index, length);
   }
 
-  private static flat(dest: List, src: List, depth: number): void {
+  private static flat(dest: List<any>, src: List<any>, depth: number): void {
     if (depth <= 0) {
       dest.append(...src);
       return;

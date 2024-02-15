@@ -1,9 +1,10 @@
-import { ToLocaleStringOptions } from "../common";
-import { sameValueZero } from "../helpers";
-import { getLocaleStringifier, join } from "../internal";
+import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import { sameValueZero } from "../helpers/same-value-zero";
+import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
+import { join } from "../__internal__/join";
 
 
-export class Queue<T = any> implements Iterable<T> {
+export class Queue<T = unknown> implements Iterable<T> {
   [index: number]: T;
 
   private _head: number;

@@ -1,56 +1,60 @@
-import { Comparer, Order } from "../common";
+import { Order } from "../common/types/order";
+
+import type { Comparer } from "./comparer";
 
 
-export const Compare = Object.freeze({
-  asStrings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<any> {
-    const collator = new Intl.Collator(locales, options);
+export function asStrings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<unknown> {
+  const collator = new Intl.Collator(locales, options);
 
-    return order === Order.Ascending
-      ? function(a: any, b: any): number {
-        return collator.compare(String(a), String(b));
-      }
-      : function(a: any, b: any): number {
-        return collator.compare(String(b), String(a));
-      };
-  },
+  return order === Order.Ascending
+    ? (x: unknown, y: unknown): number => {
+      return collator.compare(String(x), String(y));
+    }
+    : (x: unknown, y: unknown): number => {
+      return collator.compare(String(y), String(x));
+    };
+}
 
-  strings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<string> {
-    const collator = new Intl.Collator(locales, options);
 
-    return order === Order.Ascending
-      ? collator.compare
-      : function(a: string, b: string): number {
-        return collator.compare(b, a);
-      };
-  },
+export function strings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<string> {
+  const collator = new Intl.Collator(locales, options);
 
-  numbers(order: Order = Order.Ascending): Comparer<number> {
-    return order === Order.Ascending
-      ? function(a: number, b: number): number {
-        return a - b;
-      }
-      : function(a: number, b: number): number {
-        return b - a;
-      };
-  },
+  return order === Order.Ascending
+    ? collator.compare
+    : (x: string, y: string): number => {
+      return collator.compare(y, x);
+    };
+}
 
-  bigInts(order: Order = Order.Ascending): Comparer<bigint> {
-    return order === Order.Ascending
-      ? function(a: bigint, b: bigint): number {
-        return a > b ? 1 : (a < b ? -1 : 0);
-      }
-      : function(a: bigint, b: bigint): number {
-        return b > a ? 1 : (b < a ? -1 : 0);
-      };
-  },
 
-  dates(order: Order = Order.Ascending): Comparer<Date> {
-    return order === Order.Ascending
-      ? function(a: Date, b: Date): number {
-        return a.valueOf() - b.valueOf();
-      }
-      : function(a: Date, b: Date): number {
-        return b.valueOf() - a.valueOf();
-      };
-  }
-});
+export function numbers(order: Order = Order.Ascending): Comparer<number> {
+  return order === Order.Ascending
+    ? (x: number, y: number): number => {
+      return x - y;
+    }
+    : (x: number, y: number): number => {
+      return y - x;
+    };
+}
+
+
+export function bigInts(order: Order = Order.Ascending): Comparer<bigint> {
+  return order === Order.Ascending
+    ? (x: bigint, y: bigint): number => {
+      return x > y ? 1 : (x < y ? -1 : 0);
+    }
+    : (x: bigint, y: bigint): number => {
+      return y > x ? 1 : (y < x ? -1 : 0);
+    };
+}
+
+
+export function dates(order: Order = Order.Ascending): Comparer<Date> {
+  return order === Order.Ascending
+    ? (x: Date, y: Date): number => {
+      return x.valueOf() - y.valueOf();
+    }
+    : (x: Date, y: Date): number => {
+      return y.valueOf() - x.valueOf();
+    };
+}

@@ -1,23 +1,24 @@
-import { ToLocaleStringOptions } from "../common";
-import { isNullish } from "../helpers";
+import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import { isFunction } from "../common/type-checks/is-function";
+import { isNonNullish } from "../common/type-checks/is-non-nullish";
 
 
-export class Lazy<T = any> {
-  private _valueFactory: (() => T) | undefined;
-  private _isValueCreated: boolean;
-  private _value: T | undefined;
+export class Lazy<T = unknown> {
+  private _factory: (() => T) | undefined;
+  private _hasValue: boolean;
+  private _value!: T;
 
-  public get isValueCreated(): boolean {
-    return this._isValueCreated;
+  public get hasValue(): boolean {
+    return this._hasValue;
   }
 
   public get value(): T {
-    if (!this._isValueCreated) {
-      this._value = this._valueFactory!();
-      this._isValueCreated = true;
-      this._valueFactory = undefined;
+    if (!this._hasValue) {
+      this._value = this._factory!();
+      this._factory = undefined;
+      this._hasValue = true;
     }
-    return this._value!;
+    return this._value;
   }
 
   public get [Symbol.toStringTag](): string {
@@ -25,21 +26,18 @@ export class Lazy<T = any> {
   }
 
 
-  public constructor(valueFactory: () => T) {
-    this._valueFactory = valueFactory;
-    this._isValueCreated = false;
+  public constructor(factory: () => T) {
+    this._factory = factory;
+    this._hasValue = false;
   }
 
 
-  /* public */
-
-
   public toString(): string {
-    if (!this._isValueCreated) {
+    if (!this._hasValue) {
       return "Value is not created";
     }
 
-    if (!isNullish(this._value) && typeof (this._value as any).toString === "function") {
+    if (isNonNullish(this._value) && isFunction((this._value as any).toString)) {
       return (this._value as any).toString();
     }
 
@@ -47,11 +45,11 @@ export class Lazy<T = any> {
   }
 
   public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
-    if (!this._isValueCreated) {
+    if (!this._hasValue) {
       return "Value is not created";
     }
 
-    if (!isNullish(this._value) && typeof (this._value as any).toLocaleString === "function") {
+    if (isNonNullish(this._value) && isFunction((this._value as any).toLocaleString)) {
       return (this._value as any).toLocaleString(locales, options);
     }
 
