@@ -1,5 +1,5 @@
-import { isIterable } from "../common/type-checks/is-iterable";
-import { isArrayLike } from "../common/type-checks/is-array-like";
+import { isIterable } from "../common/type-checkers/is-iterable";
+import { isArrayLike } from "../common/type-checkers/is-array-like";
 
 
 export function join<T>(iterable: Iterable<T> | ArrayLike<T>, separator: string, stringifier: (value: T) => string): string {

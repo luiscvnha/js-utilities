@@ -1,4 +1,4 @@
-import { isNullish } from "../common/type-checks/is-nullish";
+import { isNullish } from "../common/type-checkers/is-nullish";
 
 
 export function typeOf(value: unknown): string {

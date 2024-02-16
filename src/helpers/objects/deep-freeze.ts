@@ -1,5 +1,5 @@
 import type { AnyObject } from "../../common/types/any-object";
-import { isObject } from "../../common/type-checks/is-object";
+import { isObject } from "../../common/type-checkers/is-object";
 import { getAll as getAllProperties } from "../../property-retriever/property-retriever";
 
 

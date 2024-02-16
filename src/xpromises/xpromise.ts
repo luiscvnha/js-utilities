@@ -1,5 +1,5 @@
 import type { Nullish } from "../common/types/nullish";
-import { isPromiseLike } from "../common/type-checks/is-promise-like";
+import { isPromiseLike } from "../common/type-checkers/is-promise-like";
 
 import type { PromiseRejectionReason } from "./types/promise-rejection-reason";
 import type { PromiseExecutor } from "./types/promise-executor";

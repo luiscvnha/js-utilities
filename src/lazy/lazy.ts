@@ -1,6 +1,6 @@
 import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
-import { isFunction } from "../common/type-checks/is-function";
-import { isNonNullish } from "../common/type-checks/is-non-nullish";
+import { isFunction } from "../common/type-checkers/is-function";
+import { isNonNullish } from "../common/type-checkers/is-non-nullish";
 
 
 export class Lazy<T = unknown> {

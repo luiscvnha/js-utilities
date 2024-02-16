@@ -1,8 +1,8 @@
 import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
 import type { Comparer } from "../compare/comparer";
-import { isArrayLike } from "../common/type-checks/is-array-like";
-import { isAsyncIterable } from "../common/type-checks/is-async-iterable";
-import { isIterable } from "../common/type-checks/is-iterable";
+import { isArrayLike } from "../common/type-checkers/is-array-like";
+import { isAsyncIterable } from "../common/type-checkers/is-async-iterable";
+import { isIterable } from "../common/type-checkers/is-iterable";
 import { sameValueZero } from "../helpers/same-value-zero";
 import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
 import { join } from "../__internal__/join";
