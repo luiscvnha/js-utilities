@@ -1,20 +1,21 @@
-import { PromiseExecutor, PromiseRejector, PromiseResolver, PromiseState } from "./types";
-import { BaseXPromise } from "./base-xpromise";
+import type { PromiseRejector } from "./types/promise-rejector";
+import type { PromiseResolver } from "./types/promise-resolver";
+import type { PromiseExecutor } from "./types/promise-executor";
+import { XPromise } from "./xpromise";
 
 
-export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
+export class ExecutableXPromise<T = void> extends XPromise<T> {
   private _resolve: PromiseResolver<T> | undefined;
   private _reject: PromiseRejector | undefined;
   private _executed: boolean;
-  protected _state: PromiseState;
 
 
   public get [Symbol.toStringTag](): string {
     return "ExecutableXPromise";
   }
 
-  public static get [Symbol.species](): PromiseConstructor {
-    return BaseXPromise[Symbol.species];
+  public static get [Symbol.species]() {
+    return XPromise;
   }
 
 
@@ -31,7 +32,6 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
     this._reject = rejectTmp;
 
     this._executed = false;
-    this._state = PromiseState.Pending;
   }
 
 
@@ -46,8 +46,6 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
 
       this._resolve = undefined;
       this._reject = undefined;
-
-      this._state = PromiseState.Fulfilled;
     };
 
     const rejectFn: PromiseRejector = (reason) => {
@@ -55,8 +53,6 @@ export class ExecutableXPromise<T = void> extends BaseXPromise<T> {
 
       this._resolve = undefined;
       this._reject = undefined;
-
-      this._state = PromiseState.Rejected;
     };
 
 

@@ -1,19 +1,20 @@
-import { PromiseRejector, PromiseResolver, PromiseState } from "./types";
-import { BaseXPromise } from "./base-xpromise";
+import type { PromiseRejectionReason } from "./types/promise-rejection-reason";
+import type { PromiseRejector } from "./types/promise-rejector";
+import type { PromiseResolver } from "./types/promise-resolver";
+import { XPromise } from "./xpromise";
 
 
-export class DeferredXPromise<T = void> extends BaseXPromise<T> {
+export class DeferredXPromise<T = void> extends XPromise<T> {
   private _resolve: PromiseResolver<T> | undefined;
   private _reject: PromiseRejector | undefined;
-  protected _state: PromiseState;
 
 
   public get [Symbol.toStringTag](): string {
     return "DeferredXPromise";
   }
 
-  public static get [Symbol.species](): PromiseConstructor {
-    return BaseXPromise[Symbol.species];
+  public static get [Symbol.species]() {
+    return XPromise;
   }
 
 
@@ -28,8 +29,6 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
 
     this._resolve = resolveTmp;
     this._reject = rejectTmp;
-
-    this._state = PromiseState.Pending;
   }
 
 
@@ -39,21 +38,17 @@ export class DeferredXPromise<T = void> extends BaseXPromise<T> {
 
       this._resolve = undefined;
       this._reject = undefined;
-
-      this._state = PromiseState.Fulfilled;
     }
 
     return this;
   }
 
-  public reject(reason?: any): DeferredXPromise<T> {
+  public reject(reason?: PromiseRejectionReason): DeferredXPromise<T> {
     if (!this.isSettled) {
       this._reject!(reason);
 
       this._resolve = undefined;
       this._reject = undefined;
-
-      this._state = PromiseState.Rejected;
     }
 
     return this;

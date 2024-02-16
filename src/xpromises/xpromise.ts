@@ -1,38 +1,104 @@
-import { PromiseExecutor, PromiseState } from "./types";
-import { BaseXPromise } from "./base-xpromise";
+import type { Nullish } from "../common/types/nullish";
+import { isPromiseLike } from "../common/type-checks/is-promise-like";
+
+import type { PromiseRejectionReason } from "./types/promise-rejection-reason";
+import type { PromiseExecutor } from "./types/promise-executor";
+import type { XPromiseSettledResult } from "./types/xpromise-settled-result";
+import type { PromiseOnFinally } from "./types/promise-on-finally";
+import type { PromiseOnFulfilled } from "./types/promise-on-fulfilled";
+import type { PromiseOnRejected } from "./types/promise-on-rejected";
+import type { IXPromise } from "./types/ixpromise";
+import { PromiseState } from "./types/promise-state";
 
 
-export class XPromise<T = void> extends BaseXPromise<T> {
-  protected _state: PromiseState;
+export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
+  declare private _state: PromiseState;
+  declare private _result: T | PromiseRejectionReason;
 
 
   public get [Symbol.toStringTag](): string {
     return "XPromise";
   }
 
-  public static get [Symbol.species](): PromiseConstructor {
-    return BaseXPromise[Symbol.species];
-  }
-
 
   public constructor(executor: PromiseExecutor<T>) {
-    let state: PromiseState | undefined;
+    let state = PromiseState.Pending;
+    let result;
 
-    super((resolve, reject) => {
+    super((superResolve, superReject) => {
+      const resolve = (value: T): void => {
+        superResolve(value);
+        state = PromiseState.Fulfilled;
+        result = value;
+        this._state = state;
+        this._result = result;
+      };
+      const reject = (reason: any): void => {
+        superReject(reason);
+        state = PromiseState.Rejected;
+        result = reason;
+        this._state = state;
+        this._result = result;
+      };
+
       executor(
         (value) => {
-          resolve(value);
-          state = PromiseState.Fulfilled;
-          this._state = state;
+          if (isPromiseLike(value)) {
+            value.then(resolve, reject);
+          } else {
+            resolve(value);
+          }
         },
-        (reason) => {
-          reject(reason);
-          state = PromiseState.Rejected;
-          this._state = state;
-        }
+        reject
       );
     });
 
-    this._state = state ?? PromiseState.Pending;
+    Object.defineProperties(this, {
+      _state: {
+        writable: true,
+        value: state,
+      },
+      _result: {
+        writable: true,
+        value: result,
+      },
+    });
   }
+
+  public get state(): PromiseState {
+    return this._state;
+  }
+
+  public get isPending(): boolean {
+    return this._state === PromiseState.Pending;
+  }
+
+  public get isFulfilled(): boolean {
+    return this._state === PromiseState.Fulfilled;
+  }
+
+  public get isRejected(): boolean {
+    return this._state === PromiseState.Rejected;
+  }
+
+  public get isSettled(): boolean {
+    return this._state === PromiseState.Fulfilled || this._state === PromiseState.Rejected;
+  }
+
+  public get result(): XPromiseSettledResult<T> {
+    if (!this.isSettled) {
+      throw new Error(`Cannot get result of unsettled ${this[Symbol.toStringTag]}`);
+    }
+
+    return {
+      state: this._state,
+      [this.isFulfilled ? "value" : "reason"]: this._result,
+    } as XPromiseSettledResult<T>;
+  }
+
+  declare public then: <TResult1 = T, TResult2 = never>(onfulfilled?: PromiseOnFulfilled<T, TResult1> | Nullish, onrejected?: PromiseOnRejected<TResult2> | Nullish) => IXPromise<TResult1 | TResult2>;
+
+  declare public catch: <TResult = never>(onrejected?: PromiseOnRejected<TResult> | Nullish) => IXPromise<T | TResult>;
+
+  declare public finally: (onfinally?: PromiseOnFinally | Nullish) => IXPromise<T>;
 }
