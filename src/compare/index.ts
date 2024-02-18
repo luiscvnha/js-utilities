@@ -7,7 +7,7 @@ import {
   dates,
 } from "./compare";
 
-export * from "./comparer";
+export * from "./types/comparer";
 export const Compare = deepFreeze({
   asStrings,
   strings,

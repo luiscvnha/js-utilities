@@ -1,5 +1,5 @@
 import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
-import type { Comparer } from "../compare/comparer";
+import type { Comparer } from "../compare/types/comparer";
 import { isArrayLike } from "../common/type-checkers/is-array-like";
 import { isAsyncIterable } from "../common/type-checkers/is-async-iterable";
 import { isIterable } from "../common/type-checkers/is-iterable";

@@ -1,6 +1,6 @@
 import { Order } from "../common/types/order";
 
-import type { Comparer } from "./comparer";
+import type { Comparer } from "./types/comparer";
 
 
 export function asStrings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<unknown> {
