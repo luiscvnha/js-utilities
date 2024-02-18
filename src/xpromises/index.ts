@@ -11,6 +11,6 @@ export * from "./types/xpromise-fulfilled-result";
 export * from "./types/xpromise-rejected-result";
 export * from "./types/xpromise-settled-result";
 
-export * from "./xpromise";
 export * from "./deferred-xpromise";
 export * from "./executable-xpromise";
+export * from "./xpromise";
