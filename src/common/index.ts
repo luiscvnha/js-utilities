@@ -1,3 +1,4 @@
+export * from "./types/any-function";
 export * from "./types/any-object";
 export * from "./types/non-nullish";
 export * from "./types/nullish";

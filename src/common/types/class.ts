@@ -1,8 +1,8 @@
+import type { AnyFunction } from "./any-function";
 import type { AnyObject } from "./any-object";
 
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export interface Class<T extends AnyObject, Args extends unknown[] = unknown[]> extends Function {
+export interface Class<T extends AnyObject, Args extends unknown[] = unknown[]> extends AnyFunction {
   new (...args: Args): T;
   readonly prototype: T;
 }
