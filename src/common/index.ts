@@ -6,6 +6,7 @@ export * from "./types/nullable-object";
 export * from "./types/nullable";
 export * from "./types/nullish";
 export * from "./types/order";
+export * from "./types/plain-object";
 export * from "./types/ref";
 export * from "./types/to-locale-string-options";
 
@@ -22,6 +23,7 @@ export * from "./type-checkers/is-nullish-or-whitespace";
 export * from "./type-checkers/is-nullish";
 export * from "./type-checkers/is-number";
 export * from "./type-checkers/is-object";
+export * from "./type-checkers/is-plain-object";
 export * from "./type-checkers/is-promise-like";
 export * from "./type-checkers/is-string";
 export * from "./type-checkers/is-symbol";
