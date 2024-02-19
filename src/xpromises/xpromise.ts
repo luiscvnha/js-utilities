@@ -1,4 +1,4 @@
-import type { Nullish } from "../common/types/nullish";
+import type { Nullable } from "../common/types/nullable";
 import { isPromiseLike } from "../common/type-checkers/is-promise-like";
 
 import type { PromiseRejectionReason } from "./types/promise-rejection-reason";
@@ -96,9 +96,9 @@ export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
     } as XPromiseSettledResult<T>;
   }
 
-  declare public then: <TResult1 = T, TResult2 = never>(onfulfilled?: PromiseOnFulfilled<T, TResult1> | Nullish, onrejected?: PromiseOnRejected<TResult2> | Nullish) => IXPromise<TResult1 | TResult2>;
+  declare public then: <TResult1 = T, TResult2 = never>(onfulfilled?: Nullable<PromiseOnFulfilled<T, TResult1>>, onrejected?: Nullable<PromiseOnRejected<TResult2>>) => IXPromise<TResult1 | TResult2>;
 
-  declare public catch: <TResult = never>(onrejected?: PromiseOnRejected<TResult> | Nullish) => IXPromise<T | TResult>;
+  declare public catch: <TResult = never>(onrejected?: Nullable<PromiseOnRejected<TResult>>) => IXPromise<T | TResult>;
 
-  declare public finally: (onfinally?: PromiseOnFinally | Nullish) => IXPromise<T>;
+  declare public finally: (onfinally?: Nullable<PromiseOnFinally>) => IXPromise<T>;
 }

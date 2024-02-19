@@ -1,4 +1,4 @@
-import type { Nullish } from "../../common/types/nullish";
+import type { Nullable } from "../../common/types/nullable";
 
 import type { PromiseOnFinally } from "./promise-on-finally";
 import type { PromiseOnFulfilled } from "./promise-on-fulfilled";
@@ -15,7 +15,7 @@ export interface IXPromise<T = void> extends Promise<T> {
   readonly isRejected: boolean;
   readonly isSettled: boolean;
   readonly result: XPromiseSettledResult<T>;
-  then<TResult1 = T, TResult2 = never>(onfulfilled?: PromiseOnFulfilled<T, TResult1> | Nullish, onrejected?: PromiseOnRejected<TResult2> | Nullish): IXPromise<TResult1 | TResult2>;
-  catch<TResult = never>(onrejected?: PromiseOnRejected<TResult> | Nullish): IXPromise<T | TResult>;
-  finally(onfinally?: PromiseOnFinally | Nullish): IXPromise<T>;
+  then<TResult1 = T, TResult2 = never>(onfulfilled?: Nullable<PromiseOnFulfilled<T, TResult1>>, onrejected?: Nullable<PromiseOnRejected<TResult2>>): IXPromise<TResult1 | TResult2>;
+  catch<TResult = never>(onrejected?: Nullable<PromiseOnRejected<TResult>>): IXPromise<T | TResult>;
+  finally(onfinally?: Nullable<PromiseOnFinally>): IXPromise<T>;
 }
