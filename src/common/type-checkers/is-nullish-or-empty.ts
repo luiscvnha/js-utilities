@@ -1,10 +1,9 @@
 import type { Nullish } from "../types/nullish";
-import { isNumber } from "./is-number";
+import { isString } from "./is-string";
 
 
-export function isNullishOrEmpty(value: unknown): value is Nullish | { length: 0 } | { size: 0 } {
+export function isNullishOrEmpty(value: unknown): boolean {
   return value === null
     || value === undefined
-    || (isNumber((value as any).length) && (value as any).length <= 0)
-    || (isNumber((value as any).size) && (value as any).size <= 0);
+    || (isString(value) && value.length <= 0);
 }
