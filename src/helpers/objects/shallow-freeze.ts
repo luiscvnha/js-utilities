@@ -1,4 +1,1 @@
-import type { AnyObject } from "../../common/types/any-object";
-
-
-export const shallowFreeze: <T extends AnyObject>(object: T) => Readonly<T> = Object.freeze;
+export const shallowFreeze: <T extends object>(obj: T) => Readonly<T> = Object.freeze;

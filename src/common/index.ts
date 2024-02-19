@@ -1,5 +1,4 @@
 export * from "./types/any-function";
-export * from "./types/any-object";
 export * from "./types/class";
 export * from "./types/non-nullish";
 export * from "./types/nullable-object";

@@ -1,7 +1,4 @@
-import type { AnyObject } from "../types/any-object";
-
-
-export function isObject(value: unknown): value is AnyObject {
+export function isObject(value: unknown): value is object {
   return typeof value === "object"
     && value !== null
     && !(value instanceof Boolean)

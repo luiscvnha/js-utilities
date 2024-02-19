@@ -1,28 +1,23 @@
-import type { AnyObject } from "../../common/types/any-object";
 import { isObject } from "../../common/type-checkers/is-object";
 import { getAll as getAllProperties } from "../../property-retriever/property-retriever";
 
 
-function deepFreezeAux<T extends AnyObject>(object: T, references: WeakSet<T>): Readonly<T> {
-  const properties = getAllProperties(object);
+function deepFreezeAux<T extends object>(obj: T, references: WeakSet<object>): Readonly<T> {
+  const properties = getAllProperties(obj);
 
   for (const name of properties) {
-    const value = object[name];
+    const value = obj[name];
 
-    if (references.has(value)) {
-      continue;
-    }
-
-    if (isObject(value)) {
+    if (isObject(value) && !references.has(value)) {
       references.add(value);
       deepFreezeAux(value, references);
     }
   }
 
-  return Object.freeze(object);
+  return Object.freeze(obj);
 }
 
 
-export function deepFreeze<T extends AnyObject>(object: T): Readonly<T> {
-  return deepFreezeAux(object, new WeakSet<T>());
+export function deepFreeze<T extends object>(obj: T): Readonly<T> {
+  return deepFreezeAux(obj, new WeakSet());
 }
