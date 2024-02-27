@@ -1,4 +1,4 @@
-import type { PlainObject } from "../types/plain-object";
+import type { PlainObject } from "./types/plain-object";
 
 
 export function isPlainObject(value: unknown): value is PlainObject {

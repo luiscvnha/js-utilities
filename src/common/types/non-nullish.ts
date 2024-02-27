@@ -1,4 +1,5 @@
 /**
  * Any non-nullish value
  */
-export type NonNullish = NonNullable<unknown>;
+// Avoids using `{}` / `NonNullable<unknown>`
+export type NonNullish = boolean | number | bigint | string | symbol | object;

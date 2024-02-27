@@ -1,4 +1,4 @@
-import type { AnyFunction } from "../types/any-function";
+import type { AnyFunction } from "./types/any-function";
 
 
 export function isFunction(value: unknown): value is AnyFunction {

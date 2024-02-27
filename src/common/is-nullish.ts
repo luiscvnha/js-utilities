@@ -1,4 +1,4 @@
-import type { Nullish } from "../types/nullish";
+import type { Nullish } from "./types/nullish";
 
 
 export function isNullish(value: unknown): value is Nullish {
