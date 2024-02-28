@@ -1,6 +1,6 @@
 import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
-import { isFunction } from "../common/type-checkers/is-function";
-import { isNonNullish } from "../common/type-checkers/is-non-nullish";
+import { stringify } from "../__internal__/stringify";
+import { localeStringify } from "../__internal__/locale-stringify";
 
 
 export class Lazy<T = unknown> {
@@ -37,11 +37,7 @@ export class Lazy<T = unknown> {
       return "Value is not created";
     }
 
-    if (isNonNullish(this._value) && isFunction((this._value as any).toString)) {
-      return (this._value as any).toString();
-    }
-
-    return String(this._value);
+    return stringify(this._value);
   }
 
   public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
@@ -49,10 +45,6 @@ export class Lazy<T = unknown> {
       return "Value is not created";
     }
 
-    if (isNonNullish(this._value) && isFunction((this._value as any).toLocaleString)) {
-      return (this._value as any).toLocaleString(locales, options);
-    }
-
-    return String(this._value);
+    return localeStringify(this._value, locales, options);
   }
 }

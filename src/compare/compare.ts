@@ -1,3 +1,4 @@
+import { stringify } from "../__internal__/stringify";
 import { Order } from "../common/types/order";
 
 import type { Comparer } from "./types/comparer";
@@ -8,10 +9,10 @@ export function asStrings(order: Order = Order.Ascending, locales?: string | str
 
   return order === Order.Ascending
     ? (x: unknown, y: unknown): number => {
-      return collator.compare(String(x), String(y));
+      return collator.compare(stringify(x), stringify(y));
     }
     : (x: unknown, y: unknown): number => {
-      return collator.compare(String(y), String(x));
+      return collator.compare(stringify(y), stringify(x));
     };
 }
 

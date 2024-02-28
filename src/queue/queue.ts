@@ -2,6 +2,7 @@ import type { ToLocaleStringOptions } from "../common/types/to-locale-string-opt
 import { sameValueZero } from "../helpers/same-value-zero";
 import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
 import { join } from "../__internal__/join";
+import { stringify } from "../__internal__/stringify";
 
 
 export class Queue<T = unknown> implements Iterable<T> {
@@ -125,7 +126,7 @@ export class Queue<T = unknown> implements Iterable<T> {
   }
 
   public toString(): string {
-    return `[${join(this, Queue.separator, String)}]`;
+    return `[${join(this, Queue.separator, stringify)}]`;
   }
 
   public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {

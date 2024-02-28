@@ -6,6 +6,7 @@ import { isIterable } from "../common/type-checkers/is-iterable";
 import { sameValueZero } from "../helpers/same-value-zero";
 import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
 import { join } from "../__internal__/join";
+import { stringify } from "../__internal__/stringify";
 import { asStrings as compareAsStrings } from "../compare/compare";
 
 
@@ -795,11 +796,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
   }
 
   public join(separator?: string | undefined): string {
-    return join(this, separator ?? List.separator, String);
+    return join(this, separator ?? List.separator, stringify);
   }
 
   public toString(): string {
-    return `[${join(this, List.separator, String)}]`;
+    return `[${join(this, List.separator, stringify)}]`;
   }
 
   public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
