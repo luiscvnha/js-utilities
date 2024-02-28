@@ -96,9 +96,15 @@ export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
     } as XPromiseSettledResult<T>;
   }
 
-  declare public then: <TResult1 = T, TResult2 = never>(onfulfilled?: Nullable<PromiseOnFulfilled<T, TResult1>>, onrejected?: Nullable<PromiseOnRejected<TResult2>>) => IXPromise<TResult1 | TResult2>;
+  public override then<TResult1 = T, TResult2 = never>(onfulfilled?: Nullable<PromiseOnFulfilled<T, TResult1>>, onrejected?: Nullable<PromiseOnRejected<TResult2>>): IXPromise<TResult1 | TResult2> {
+    return super.then(onfulfilled, onrejected) as IXPromise<TResult1 | TResult2>;
+  }
 
-  declare public catch: <TResult = never>(onrejected?: Nullable<PromiseOnRejected<TResult>>) => IXPromise<T | TResult>;
+  public override catch<TResult = never>(onrejected?: Nullable<PromiseOnRejected<TResult>>): IXPromise<T | TResult> {
+    return super.catch(onrejected) as IXPromise<T | TResult>;
+  }
 
-  declare public finally: (onfinally?: Nullable<PromiseOnFinally>) => IXPromise<T>;
+  public override finally(onfinally?: Nullable<PromiseOnFinally>): IXPromise<T> {
+    return super.finally(onfinally) as IXPromise<T>;
+  }
 }
