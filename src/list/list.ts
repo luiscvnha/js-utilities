@@ -1,4 +1,5 @@
-import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import type { FormatOptions } from "../common/types/format-options";
+import type { LocalesArgument } from "../common/types/locales-argument";
 import type { Comparer } from "../compare/types/comparer";
 import { isArrayLike } from "../common/is-array-like";
 import { isAsyncIterable } from "../common/is-async-iterable";
@@ -803,7 +804,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     return `[${join(this, List.separator, stringify)}]`;
   }
 
-  public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
+  public toLocaleString(locales?: LocalesArgument | undefined, options?: FormatOptions | undefined): string {
     return `[${join(this, List.separator, getLocaleStringifier(locales, options))}]`;
   }
 

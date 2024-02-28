@@ -4,7 +4,11 @@ import { Order } from "../common/types/order";
 import type { Comparer } from "./types/comparer";
 
 
-export function asStrings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<unknown> {
+export function asStrings(
+  order: Order = Order.Ascending,
+  locales?: string | string[] | undefined,
+  options?: Intl.CollatorOptions | undefined,
+): Comparer<unknown> {
   const collator = new Intl.Collator(locales, options);
 
   return order === Order.Ascending
@@ -17,7 +21,11 @@ export function asStrings(order: Order = Order.Ascending, locales?: string | str
 }
 
 
-export function strings(order: Order = Order.Ascending, locales?: string | string[] | undefined, options?: Intl.CollatorOptions | undefined): Comparer<string> {
+export function strings(
+  order: Order = Order.Ascending,
+  locales?: string | string[] | undefined,
+  options?: Intl.CollatorOptions | undefined,
+): Comparer<string> {
   const collator = new Intl.Collator(locales, options);
 
   return order === Order.Ascending

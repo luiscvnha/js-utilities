@@ -1,5 +1,7 @@
 export * from "./types/any-function";
 export * from "./types/class";
+export * from "./types/format-options";
+export * from "./types/locales-argument";
 export * from "./types/non-nullish";
 export * from "./types/nullable-object";
 export * from "./types/nullable";
@@ -7,7 +9,6 @@ export * from "./types/nullish";
 export * from "./types/order";
 export * from "./types/plain-object";
 export * from "./types/ref";
-export * from "./types/to-locale-string-options";
 
 export * from "./is-array-like";
 export * from "./is-async-iterable";

@@ -1,4 +1,5 @@
-import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import type { FormatOptions } from "../common/types/format-options";
+import type { LocalesArgument } from "../common/types/locales-argument";
 import { isNonNullish } from "../common/is-non-nullish";
 import { isFunction } from "../common/is-function";
 import { isString } from "../common/is-string";
@@ -6,8 +7,8 @@ import { isString } from "../common/is-string";
 
 export function localeStringify(
   value: unknown,
-  locales?: Intl.LocalesArgument | undefined,
-  options?: ToLocaleStringOptions | undefined
+  locales?: LocalesArgument | undefined,
+  options?: FormatOptions | undefined,
 ): string {
   if (isString(value)) {
     return value;

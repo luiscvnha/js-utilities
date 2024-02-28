@@ -1,4 +1,5 @@
-import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import type { FormatOptions } from "../common/types/format-options";
+import type { LocalesArgument } from "../common/types/locales-argument";
 import { stringify } from "../__internal__/stringify";
 import { localeStringify } from "../__internal__/locale-stringify";
 
@@ -40,7 +41,7 @@ export class Lazy<T = unknown> {
     return stringify(this._value);
   }
 
-  public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
+  public toLocaleString(locales?: LocalesArgument | undefined, options?: FormatOptions | undefined): string {
     if (!this._hasValue) {
       return "Value is not created";
     }

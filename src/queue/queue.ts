@@ -1,4 +1,5 @@
-import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
+import type { FormatOptions } from "../common/types/format-options";
+import type { LocalesArgument } from "../common/types/locales-argument";
 import { sameValueZero } from "../helpers/same-value-zero";
 import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
 import { join } from "../__internal__/join";
@@ -129,7 +130,7 @@ export class Queue<T = unknown> implements Iterable<T> {
     return `[${join(this, Queue.separator, stringify)}]`;
   }
 
-  public toLocaleString(locales?: Intl.LocalesArgument | undefined, options?: ToLocaleStringOptions | undefined): string {
+  public toLocaleString(locales?: LocalesArgument | undefined, options?: FormatOptions | undefined): string {
     return `[${join(this, Queue.separator, getLocaleStringifier(locales, options))}]`;
   }
 

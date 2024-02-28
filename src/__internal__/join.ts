@@ -5,7 +5,7 @@ import { isArrayLike } from "../common/is-array-like";
 export function join<T>(
   iterable: Iterable<T> | ArrayLike<T>,
   separator: string,
-  stringifier: (value: T) => string
+  stringifier: (value: T) => string,
 ): string {
   let r: string;
 
