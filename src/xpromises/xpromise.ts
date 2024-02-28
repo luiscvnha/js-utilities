@@ -1,5 +1,5 @@
 import type { Nullable } from "../common/types/nullable";
-import { isPromiseLike } from "../common/type-checkers/is-promise-like";
+import { isPromiseLike } from "../common/is-promise-like";
 
 import type { PromiseRejectionReason } from "./types/promise-rejection-reason";
 import type { PromiseExecutor } from "./types/promise-executor";
@@ -33,7 +33,7 @@ export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
         this._state = state;
         this._result = result;
       };
-      const reject = (reason: any): void => {
+      const reject = (reason: PromiseRejectionReason): void => {
         superReject(reason);
         state = PromiseState.Rejected;
         result = reason;

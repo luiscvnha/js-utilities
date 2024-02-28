@@ -1,8 +1,8 @@
 import type { ToLocaleStringOptions } from "../common/types/to-locale-string-options";
 import type { Comparer } from "../compare/types/comparer";
-import { isArrayLike } from "../common/type-checkers/is-array-like";
-import { isAsyncIterable } from "../common/type-checkers/is-async-iterable";
-import { isIterable } from "../common/type-checkers/is-iterable";
+import { isArrayLike } from "../common/is-array-like";
+import { isAsyncIterable } from "../common/is-async-iterable";
+import { isIterable } from "../common/is-iterable";
 import { sameValueZero } from "../helpers/same-value-zero";
 import { getLocaleStringifier } from "../__internal__/get-locale-stringifier";
 import { join } from "../__internal__/join";
@@ -828,7 +828,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
       mapFn = mapFn.bind(thisArg);
     }
 
-    if (isIterable<T>(iterable)) {
+    if (isIterable(iterable)) {
       const iterator: Iterator<T> = iterable[Symbol.iterator]();
 
       let i = 0;
@@ -842,7 +842,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
       r._length = i;
     }
-    else if (isArrayLike<T>(iterable)) {
+    else if (isArrayLike(iterable)) {
       const length = iterable.length;
       let i = 0;
       for (; i < length; ++i) {
@@ -867,9 +867,9 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
       mapFn = mapFn.bind(thisArg);
     }
 
-    const asyncIterable = isAsyncIterable<T>(iterable);
-    if (asyncIterable || isIterable<T>(iterable)) {
-      const iterator: AsyncIterator<T> | Iterator<T> = asyncIterable
+    const asyncIterable = isAsyncIterable(iterable);
+    if (asyncIterable || isIterable(iterable)) {
+      const iterator: AsyncIterator<T | Promise<T>> | Iterator<T | Promise<T>> = asyncIterable
         ? iterable[Symbol.asyncIterator]()
         : iterable[Symbol.iterator]();
 
@@ -885,7 +885,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
       r._length = i;
     }
-    else if (isArrayLike<T>(iterable)) {
+    else if (isArrayLike(iterable)) {
       const length = iterable.length;
       let i = 0;
       for (; i < length; ++i) {

@@ -1,11 +1,15 @@
-import { isIterable } from "../common/type-checkers/is-iterable";
-import { isArrayLike } from "../common/type-checkers/is-array-like";
+import { isIterable } from "../common/is-iterable";
+import { isArrayLike } from "../common/is-array-like";
 
 
-export function join<T>(iterable: Iterable<T> | ArrayLike<T>, separator: string, stringifier: (value: T) => string): string {
+export function join<T>(
+  iterable: Iterable<T> | ArrayLike<T>,
+  separator: string,
+  stringifier: (value: T) => string
+): string {
   let r: string;
 
-  if (isArrayLike<T>(iterable)) {
+  if (isArrayLike(iterable)) {
     const length = iterable.length;
     if (length <= 0) {
       return "";
@@ -17,7 +21,7 @@ export function join<T>(iterable: Iterable<T> | ArrayLike<T>, separator: string,
     }
   }
 
-  else if (isIterable<T>(iterable)) {
+  else if (isIterable(iterable)) {
     const iterator = iterable[Symbol.iterator]();
     let result = iterator.next();
     if (result.done === true) {

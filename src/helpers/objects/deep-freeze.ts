@@ -1,4 +1,4 @@
-import { isObject } from "../../common/type-checkers/is-object";
+import { isObject } from "../../common/is-object";
 import { getAll as getAllProperties } from "../../property-retriever/property-retriever";
 
 
