@@ -1,5 +1,5 @@
 import { isObject } from "../../common/is-object";
-import { getAll as getAllProperties } from "../../property-retriever/property-retriever";
+import { getAll as getAllProperties } from "../../properties/properties";
 
 
 function deepFreezeAux<T extends object>(obj: T, references: WeakSet<object>): Readonly<T> {
