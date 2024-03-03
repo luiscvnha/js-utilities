@@ -1,60 +1,107 @@
 import { PromiseState, DeferredXPromise } from "../../src/xpromises";
+import { expectToBeInstanceOfXPromise, expectXPromiseToBe } from "./test-helpers";
 
 
-describe("Testing DeferredXPromise", () => {
+describe("DeferredXPromise", () => {
 
-  test("State when unsettled", () => {
+  test("unsettled", () => {
     const p = new DeferredXPromise();
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
   });
 
-  test("State when resolving synchronously", () => {
-    const p = new DeferredXPromise();
-    p.resolve();
+  test("resolving synchronously", () => {
+    const p = new DeferredXPromise<boolean>();
+    p.resolve(true);
 
-    expect(p.state).toBe(PromiseState.Fulfilled);
+    expectXPromiseToBe(p, PromiseState.Fulfilled, true);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.Fulfilled);
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
     });
   });
 
-  test("State when rejecting synchronously", () => {
-    const p = new DeferredXPromise();
-    p.reject();
-
-    expect(p.state).toBe(PromiseState.Rejected);
-
-    return p.catch(() => {
-      expect(p.state).toBe(PromiseState.Rejected);
-    });
-  });
-
-  test("State when resolving asynchronously", () => {
-    const p = new DeferredXPromise();
-    setTimeout(() => {
-      p.resolve();
+  test("resolving asynchronously", () => {
+    const p = new DeferredXPromise<boolean>();
+    global.setTimeout(() => {
+      p.resolve(true);
     });
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.Fulfilled);
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
     });
   });
 
-  test("State when rejecting asynchronously", () => {
-    const p = new DeferredXPromise();
-    setTimeout(() => {
-      p.reject();
-    });
+  test("resolving asynchronously via another promise", () => {
+    const p = new DeferredXPromise<boolean>();
+    p.resolve(Promise.resolve(true));
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
+
+    return p.then(() => {
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
+    });
+  });
+
+  test("rejecting synchronously", () => {
+    const p = new DeferredXPromise<boolean>();
+    p.reject(false);
+
+    expectXPromiseToBe(p, PromiseState.Rejected, false);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.Rejected);
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
     });
+  });
+
+  test("rejecting asynchronously", () => {
+    const p = new DeferredXPromise<boolean>();
+    global.setTimeout(() => {
+      p.reject(false);
+    });
+
+    expectXPromiseToBe(p, PromiseState.Pending);
+
+    return p.catch(() => {
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
+    });
+  });
+
+  test("rejecting asynchronously via another promise", () => {
+    const p = new DeferredXPromise<boolean>();
+    p.resolve(Promise.reject(false));
+
+    expectXPromiseToBe(p, PromiseState.Pending);
+
+    return p.catch(() => {
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
+    });
+  });
+
+  test("return value of DeferredXPromise.prototype.then()", () => {
+    const p1 = new DeferredXPromise();
+
+    const p2 = p1.then(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
+  });
+
+  test("return value of DeferredXPromise.prototype.catch()", () => {
+    const p1 = new DeferredXPromise();
+
+    const p2 = p1.catch(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
+  });
+
+  test("return value of DeferredXPromise.prototype.finally()", () => {
+    const p1 = new DeferredXPromise();
+
+    const p2 = p1.finally(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
   });
 
 });

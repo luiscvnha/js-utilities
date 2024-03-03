@@ -1,72 +1,123 @@
 import { PromiseState, ExecutableXPromise } from "../../src/xpromises";
+import { expectToBeInstanceOfXPromise, expectXPromiseToBe } from "./test-helpers";
 
 
-describe("Testing ExecutableXPromise", () => {
+describe("ExecutableXPromise", () => {
 
-  test("State when unsettled", () => {
+  test("unsettled", () => {
     const p = new ExecutableXPromise();
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
 
     p.execute(() => {});
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
   });
 
-  test("State when resolving synchronously", () => {
-    const p = new ExecutableXPromise();
+  test("resolving synchronously", () => {
+    const p = new ExecutableXPromise<boolean>();
     p.execute((resolve) => {
-      resolve();
+      resolve(true);
     });
 
-    expect(p.state).toBe(PromiseState.Fulfilled);
+    expectXPromiseToBe(p, PromiseState.Fulfilled, true);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.Fulfilled);
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
     });
   });
 
-  test("State when rejecting synchronously", () => {
-    const p = new ExecutableXPromise();
-    p.execute((resolve, reject) => {
-      reject();
-    });
-
-    expect(p.state).toBe(PromiseState.Rejected);
-
-    return p.catch(() => {
-      expect(p.state).toBe(PromiseState.Rejected);
-    });
-  });
-
-  test("State when resolving asynchronously", () => {
-    const p = new ExecutableXPromise();
+  test("resolving asynchronously", () => {
+    const p = new ExecutableXPromise<boolean>();
     p.execute((resolve) => {
-      setTimeout(() => {
-        resolve();
+      global.setTimeout(() => {
+        resolve(true);
       });
     });
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
 
     return p.then(() => {
-      expect(p.state).toBe(PromiseState.Fulfilled);
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
     });
   });
 
-  test("State when rejecting asynchronously", () => {
-    const p = new ExecutableXPromise();
+  test("resolving asynchronously via another promise", () => {
+    const p = new ExecutableXPromise<boolean>();
+    p.execute((resolve) => {
+      resolve(Promise.resolve(true));
+    });
+
+    expectXPromiseToBe(p, PromiseState.Pending);
+
+    return p.then(() => {
+      expectXPromiseToBe(p, PromiseState.Fulfilled, true);
+    });
+  });
+
+  test("rejecting synchronously", () => {
+    const p = new ExecutableXPromise<boolean>();
     p.execute((resolve, reject) => {
-      setTimeout(() => {
-        reject();
+      reject(false);
+    });
+
+    expectXPromiseToBe(p, PromiseState.Rejected, false);
+
+    return p.catch(() => {
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
+    });
+  });
+
+  test("rejecting asynchronously", () => {
+    const p = new ExecutableXPromise<boolean>();
+    p.execute((resolve, reject) => {
+      global.setTimeout(() => {
+        reject(false);
       });
     });
 
-    expect(p.state).toBe(PromiseState.Pending);
+    expectXPromiseToBe(p, PromiseState.Pending);
 
     return p.catch(() => {
-      expect(p.state).toBe(PromiseState.Rejected);
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
     });
+  });
+
+  test("rejecting asynchronously via another promise", () => {
+    const p = new ExecutableXPromise<boolean>();
+    p.execute((resolve) => {
+      resolve(Promise.reject(false));
+    });
+
+    expectXPromiseToBe(p, PromiseState.Pending);
+
+    return p.catch(() => {
+      expectXPromiseToBe(p, PromiseState.Rejected, false);
+    });
+  });
+
+  test("return value of ExecutableXPromise.prototype.then()", () => {
+    const p1 = new ExecutableXPromise();
+
+    const p2 = p1.then(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
+  });
+
+  test("return value of ExecutableXPromise.prototype.catch()", () => {
+    const p1 = new ExecutableXPromise();
+
+    const p2 = p1.catch(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
+  });
+
+  test("return value of ExecutableXPromise.prototype.finally()", () => {
+    const p1 = new ExecutableXPromise();
+
+    const p2 = p1.finally(() => {});
+
+    expectToBeInstanceOfXPromise(p2);
   });
 
 });

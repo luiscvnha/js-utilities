@@ -1,7 +1,7 @@
-import { Stack } from "../src/stack";
+import { Stack } from "../../src/stack";
 
 
-describe("Testing Stack", () => {
+describe("Stack", () => {
 
   test("Stack() constructor", () => {
     // #1

@@ -1,7 +1,7 @@
-import { Lazy } from "../src/lazy";
+import { Lazy } from "../../src/lazy";
 
 
-describe("Testing Lazy", () => {
+describe("Lazy", () => {
 
   test("Lazy() constructor", () => {
     let executed = 0;
@@ -11,17 +11,17 @@ describe("Testing Lazy", () => {
       return 200;
     });
 
-    expect(lazy.isValueCreated).toBe(false);
+    expect(lazy.hasValue).toBe(false);
     expect(executed).toBe(0);
 
     expect(lazy.value).toBe(200);
 
-    expect(lazy.isValueCreated).toBe(true);
+    expect(lazy.hasValue).toBe(true);
     expect(executed).toBe(1);
 
     expect(lazy.value).toBe(200);
 
-    expect(lazy.isValueCreated).toBe(true);
+    expect(lazy.hasValue).toBe(true);
     expect(executed).toBe(1);
   });
 

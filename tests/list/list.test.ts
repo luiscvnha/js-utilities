@@ -1,19 +1,19 @@
 import { List } from "../../src/list";
 import { Compare } from "../../src/compare";
-import { expectToEqual } from "./test-helpers";
+import { expectListToBe } from "./test-helpers";
 
 
-describe("Testing List", () => {
+describe("List", () => {
 
   test("List() constructor", () => {
     // #1
-    expectToEqual(new List(), []);
+    expectListToBe(new List(), []);
 
     // #2
-    expectToEqual(new List(0), [0]);
+    expectListToBe(new List(0), [0]);
 
     // #3
-    expectToEqual(new List(1, 2, 3), [1, 2, 3]);
+    expectListToBe(new List(1, 2, 3), [1, 2, 3]);
   });
 
   test("List.prototype.append()", () => {
@@ -22,19 +22,19 @@ describe("Testing List", () => {
     // #1
     let length = list.append();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(length).toBe(0);
 
     // #2
     length = list.append(1);
 
-    expectToEqual(list, [1]);
+    expectListToBe(list, [1]);
     expect(length).toBe(1);
 
     // #3
     length = list.append(2, 3);
 
-    expectToEqual(list, [1, 2, 3]);
+    expectListToBe(list, [1, 2, 3]);
     expect(length).toBe(3);
   });
 
@@ -44,19 +44,19 @@ describe("Testing List", () => {
     // #1
     let length = list.prepend();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(length).toBe(0);
 
     // #2
     length = list.prepend(3);
 
-    expectToEqual(list, [3]);
+    expectListToBe(list, [3]);
     expect(length).toBe(1);
 
     // #3
     length = list.prepend(1, 2);
 
-    expectToEqual(list, [1, 2, 3]);
+    expectListToBe(list, [1, 2, 3]);
     expect(length).toBe(3);
   });
 
@@ -66,25 +66,25 @@ describe("Testing List", () => {
     // #1
     let last = list.removeLast();
 
-    expectToEqual(list, [1, 2]);
+    expectListToBe(list, [1, 2]);
     expect(last).toBe(3);
 
     // #2
     last = list.removeLast();
 
-    expectToEqual(list, [1]);
+    expectListToBe(list, [1]);
     expect(last).toBe(2);
 
     // #3
     last = list.removeLast();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(last).toBe(1);
 
     // #4
     last = list.removeLast();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(last).toBe(undefined);
   });
 
@@ -94,25 +94,25 @@ describe("Testing List", () => {
     // #1
     let first = list.removeFirst();
 
-    expectToEqual(list, [2, 3]);
+    expectListToBe(list, [2, 3]);
     expect(first).toBe(1);
 
     // #2
     first = list.removeFirst();
 
-    expectToEqual(list, [3]);
+    expectListToBe(list, [3]);
     expect(first).toBe(2);
 
     // #3
     first = list.removeFirst();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(first).toBe(3);
 
     // #4
     first = list.removeFirst();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(first).toBe(undefined);
   });
 
@@ -121,28 +121,28 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 2, 1);
     let removed = list.remove(1);
 
-    expectToEqual(list, [2, 3, 2, 1]);
+    expectListToBe(list, [2, 3, 2, 1]);
     expect(removed).toBe(true);
 
     // #2
     list = new List(1, 2, 3, 2, 1);
     removed = list.remove(2);
 
-    expectToEqual(list, [1, 3, 2, 1]);
+    expectListToBe(list, [1, 3, 2, 1]);
     expect(removed).toBe(true);
 
     // #3
     list = new List(1, 2, 3, 2, 1);
     removed = list.remove(3);
 
-    expectToEqual(list, [1, 2, 2, 1]);
+    expectListToBe(list, [1, 2, 2, 1]);
     expect(removed).toBe(true);
 
     // #4
     list = new List(1, 2, 3, 2, 1);
     removed = list.remove(4);
 
-    expectToEqual(list, [1, 2, 3, 2, 1]);
+    expectListToBe(list, [1, 2, 3, 2, 1]);
     expect(removed).toBe(false);
   });
 
@@ -151,28 +151,28 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 2, 1);
     let removed = list.removeAll(1);
 
-    expectToEqual(list, [2, 3, 2]);
+    expectListToBe(list, [2, 3, 2]);
     expect(removed).toBe(2);
 
     // #2
     list = new List(1, 2, 3, 2, 1);
     removed = list.removeAll(2);
 
-    expectToEqual(list, [1, 3, 1]);
+    expectListToBe(list, [1, 3, 1]);
     expect(removed).toBe(2);
 
     // #3
     list = new List(1, 2, 3, 2, 1);
     removed = list.removeAll(3);
 
-    expectToEqual(list, [1, 2, 2, 1]);
+    expectListToBe(list, [1, 2, 2, 1]);
     expect(removed).toBe(1);
 
     // #4
     list = new List(1, 2, 3, 2, 1);
     removed = list.removeAll(4);
 
-    expectToEqual(list, [1, 2, 3, 2, 1]);
+    expectListToBe(list, [1, 2, 3, 2, 1]);
     expect(removed).toBe(0);
   });
 
@@ -181,22 +181,22 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 2, 1);
     let removed = list.removeIf(v => v === 2);
 
-    expectToEqual(list, [1, 3, 1]);
-    expectToEqual(removed, [2, 2]);
+    expectListToBe(list, [1, 3, 1]);
+    expectListToBe(removed, [2, 2]);
 
     // #2
     list = new List(1, -5, 3, 5, -4);
     removed = list.removeIf(v => v * v === 25);
 
-    expectToEqual(list, [1, 3, -4]);
-    expectToEqual(removed, [-5, 5]);
+    expectListToBe(list, [1, 3, -4]);
+    expectListToBe(removed, [-5, 5]);
 
     // #3
     list = new List(1, 5, 3, 6, 4);
     removed = list.removeIf(v => v < 0);
 
-    expectToEqual(list, [1, 5, 3, 6, 4]);
-    expectToEqual(removed, []);
+    expectListToBe(list, [1, 5, 3, 6, 4]);
+    expectListToBe(removed, []);
   });
 
   test("List.prototype.fill()", () => {
@@ -204,42 +204,42 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3);
     let returnedList = list.fill(0);
 
-    expectToEqual(list, [0, 0, 0]);
+    expectListToBe(list, [0, 0, 0]);
     expect(returnedList).toBe(list);
 
     // #2
     list = new List();
     returnedList = list.fill(0);
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
     expect(returnedList).toBe(list);
 
     // #3
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.fill(0, 2);
 
-    expectToEqual(list, [1, 2, 0, 0, 0]);
+    expectListToBe(list, [1, 2, 0, 0, 0]);
     expect(returnedList).toBe(list);
 
     // #4
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.fill(0, 1, 3);
 
-    expectToEqual(list, [1, 0, 0, 4, 5]);
+    expectListToBe(list, [1, 0, 0, 4, 5]);
     expect(returnedList).toBe(list);
 
     // #5
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.fill(0, -2);
 
-    expectToEqual(list, [1, 2, 3, 0, 0]);
+    expectListToBe(list, [1, 2, 3, 0, 0]);
     expect(returnedList).toBe(list);
 
     // #6
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.fill(0, -3, -2);
 
-    expectToEqual(list, [1, 2, 0, 4, 5]);
+    expectListToBe(list, [1, 2, 0, 4, 5]);
     expect(returnedList).toBe(list);
   });
 
@@ -259,7 +259,7 @@ describe("Testing List", () => {
     const list = new List(1, 2, 3);
     list.clear();
 
-    expectToEqual(list, []);
+    expectListToBe(list, []);
   });
 
   test("List.prototype.at()", () => {
@@ -302,7 +302,7 @@ describe("Testing List", () => {
     // #3
     const newList = list.with(0, 4);
 
-    expectToEqual(newList, [4, 2, 3]);
+    expectListToBe(newList, [4, 2, 3]);
     expect(newList).not.toBe(list);
   });
 
@@ -666,35 +666,35 @@ describe("Testing List", () => {
     let list = new List(1, 2);
     let newList = list.concat();
 
-    expectToEqual(newList, [1, 2]);
+    expectListToBe(newList, [1, 2]);
     expect(newList).not.toBe(list);
 
     // #2
     list = new List(1, 2);
     newList = list.concat(new List(3, 4, 5));
 
-    expectToEqual(newList, [1, 2, 3, 4, 5]);
+    expectListToBe(newList, [1, 2, 3, 4, 5]);
     expect(newList).not.toBe(list);
 
     // #3
     list = new List(1, 2);
     newList = list.concat(new List(3), new List(4, 5, 6));
 
-    expectToEqual(newList, [1, 2, 3, 4, 5, 6]);
+    expectListToBe(newList, [1, 2, 3, 4, 5, 6]);
     expect(newList).not.toBe(list);
 
     // #4
     list = new List(1);
     newList = list.concat(2, 3, 4);
 
-    expectToEqual(newList, [1, 2, 3, 4]);
+    expectListToBe(newList, [1, 2, 3, 4]);
     expect(newList).not.toBe(list);
 
     // #5
     list = new List(1);
     newList = list.concat(new List(2, 3), 4, 5, new List(6));
 
-    expectToEqual(newList, [1, 2, 3, 4, 5, 6]);
+    expectListToBe(newList, [1, 2, 3, 4, 5, 6]);
     expect(newList).not.toBe(list);
   });
 
@@ -704,13 +704,13 @@ describe("Testing List", () => {
     // #1
     let newList = list.filter(v => v % 2 === 0);
 
-    expectToEqual(newList, [2, 4, 6]);
+    expectListToBe(newList, [2, 4, 6]);
     expect(newList).not.toBe(list);
 
     // #2
     newList = list.filter(v => v < 4);
 
-    expectToEqual(newList, [1, 2, 3]);
+    expectListToBe(newList, [1, 2, 3]);
     expect(newList).not.toBe(list);
   });
 
@@ -720,13 +720,13 @@ describe("Testing List", () => {
     // #1
     let newList = list.map(v => v * 2);
 
-    expectToEqual(newList, [2, 4, 6, 8, 10, 12]);
+    expectListToBe(newList, [2, 4, 6, 8, 10, 12]);
     expect(newList).not.toBe(list);
 
     // #2
     newList = list.map(v => v + 3);
 
-    expectToEqual(newList, [4, 5, 6, 7, 8, 9]);
+    expectListToBe(newList, [4, 5, 6, 7, 8, 9]);
     expect(newList).not.toBe(list);
   });
 
@@ -735,28 +735,28 @@ describe("Testing List", () => {
     let list = new List<any>(1, 2, new List<any>(3, 4));
     let newList = list.flat();
 
-    expectToEqual(newList, [1, 2, 3, 4]);
+    expectListToBe(newList, [1, 2, 3, 4]);
     expect(newList).not.toBe(list);
 
     // #2
     list = new List<any>(1, 2, new List<any>(3, 4, new List<any>(5, 6)));
     newList = list.flat();
 
-    expectToEqual(newList, [1, 2, 3, 4, [5, 6]]);
+    expectListToBe(newList, [1, 2, 3, 4, [5, 6]]);
     expect(newList).not.toBe(list);
 
     // #3
     list = new List<any>(1, 2, new List<any>(3, 4, new List<any>(5, 6)));
     newList = list.flat(2);
 
-    expectToEqual(newList, [1, 2, 3, 4, 5, 6]);
+    expectListToBe(newList, [1, 2, 3, 4, 5, 6]);
     expect(newList).not.toBe(list);
 
     // #4
     list = new List<any>(1, 2, new List<any>(3, 4, new List<any>(5, 6, new List<any>(7, 8, new List<any>(9, 10)))));
     newList = list.flat(Infinity);
 
-    expectToEqual(newList, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expectListToBe(newList, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     expect(newList).not.toBe(list);
   });
 
@@ -767,25 +767,25 @@ describe("Testing List", () => {
     // #1
     let newList = list1.flatMap<any>(v => new List(2*v));
 
-    expectToEqual(newList, [2, 4, 6, 8]);
+    expectListToBe(newList, [2, 4, 6, 8]);
     expect(newList).not.toBe(list1);
 
     // #2
     newList = list1.flatMap(v => new List(2*v - 1, 2*v));
 
-    expectToEqual(newList, [1, 2, 3, 4, 5, 6, 7, 8]);
+    expectListToBe(newList, [1, 2, 3, 4, 5, 6, 7, 8]);
     expect(newList).not.toBe(list1);
 
     // #3
     newList = list1.flatMap(v => new List(new List(2*v)));
 
-    expectToEqual(newList, [[2], [4], [6], [8]]);
+    expectListToBe(newList, [[2], [4], [6], [8]]);
     expect(newList).not.toBe(list1);
 
     // #4
     newList = list2.flatMap(v => List.from(v.split(" ")));
 
-    expectToEqual(newList, ["it's", "Sunny", "in", "", "California"]);
+    expectListToBe(newList, ["it's", "Sunny", "in", "", "California"]);
     expect(newList).not.toBe(list2);
   });
 
@@ -799,7 +799,7 @@ describe("Testing List", () => {
     );
 
     // #1
-    expectToEqual(
+    expectListToBe(
       list.group(v => v.type),
       {
         vegetables: [
@@ -817,7 +817,7 @@ describe("Testing List", () => {
     );
 
     // #2
-    expectToEqual(
+    expectListToBe(
       list.group(v => v.quantity > 5 ? "ok" : "restock"),
       {
         restock: [
@@ -843,7 +843,7 @@ describe("Testing List", () => {
     );
 
     // #1
-    expectToEqual(
+    expectListToBe(
       list.groupToMap(v => v.type),
       new Map<string, {name: string, type: string, quantity: number}[]>([
         ["vegetables", [
@@ -861,7 +861,7 @@ describe("Testing List", () => {
     );
 
     // #2
-    expectToEqual(
+    expectListToBe(
       list.groupToMap(v => v.quantity > 5 ? "ok" : "restock"),
       new Map<string, {name: string, type: string, quantity: number}[]>([
         ["restock", [
@@ -883,19 +883,19 @@ describe("Testing List", () => {
     // #1
     let newList = list.slice();
 
-    expectToEqual(newList, ["Banana", "Orange", "Lemon", "Apple", "Mango"]);
+    expectListToBe(newList, ["Banana", "Orange", "Lemon", "Apple", "Mango"]);
     expect(newList).not.toBe(list);
 
     // #2
     newList = list.slice(2);
 
-    expectToEqual(newList, ["Lemon", "Apple", "Mango"]);
+    expectListToBe(newList, ["Lemon", "Apple", "Mango"]);
     expect(newList).not.toBe(list);
 
     // #3
     newList = list.slice(1, 3);
 
-    expectToEqual(newList, ["Orange", "Lemon"]);
+    expectListToBe(newList, ["Orange", "Lemon"]);
     expect(newList).not.toBe(list);
   });
 
@@ -904,57 +904,57 @@ describe("Testing List", () => {
     let list = new List("angel", "clown", "mandarin", "sturgeon");
     let removed = list.splice(2, 0, "drum");
 
-    expectToEqual(list, ["angel", "clown", "drum", "mandarin", "sturgeon"]);
-    expectToEqual(removed, []);
+    expectListToBe(list, ["angel", "clown", "drum", "mandarin", "sturgeon"]);
+    expectListToBe(removed, []);
 
     // #2
     list = new List("angel", "clown", "mandarin", "sturgeon");
     removed = list.splice(2, 0, "drum", "guitar");
 
-    expectToEqual(list, ["angel", "clown", "drum", "guitar", "mandarin", "sturgeon"]);
-    expectToEqual(removed, []);
+    expectListToBe(list, ["angel", "clown", "drum", "guitar", "mandarin", "sturgeon"]);
+    expectListToBe(removed, []);
 
     // #3
     list = new List("angel", "clown", "drum", "mandarin", "sturgeon");
     removed = list.splice(3, 1);
 
-    expectToEqual(list, ["angel", "clown", "drum", "sturgeon"]);
-    expectToEqual(removed, ["mandarin"]);
+    expectListToBe(list, ["angel", "clown", "drum", "sturgeon"]);
+    expectListToBe(removed, ["mandarin"]);
 
     // #4
     list = new List("angel", "clown", "drum", "sturgeon");
     removed = list.splice(2, 1, "trumpet");
 
-    expectToEqual(list, ["angel", "clown", "trumpet", "sturgeon"]);
-    expectToEqual(removed, ["drum"]);
+    expectListToBe(list, ["angel", "clown", "trumpet", "sturgeon"]);
+    expectListToBe(removed, ["drum"]);
 
     // #5
     list = new List("angel", "clown", "trumpet", "sturgeon");
     removed = list.splice(0, 2, "parrot", "anemone", "blue");
 
-    expectToEqual(list, ["parrot", "anemone", "blue", "trumpet", "sturgeon"]);
-    expectToEqual(removed, ["angel", "clown"]);
+    expectListToBe(list, ["parrot", "anemone", "blue", "trumpet", "sturgeon"]);
+    expectListToBe(removed, ["angel", "clown"]);
 
     // #6
     list = new List("parrot", "anemone", "blue", "trumpet", "sturgeon");
     removed = list.splice(2, 2);
 
-    expectToEqual(list, ["parrot", "anemone", "sturgeon"]);
-    expectToEqual(removed, ["blue", "trumpet"]);
+    expectListToBe(list, ["parrot", "anemone", "sturgeon"]);
+    expectListToBe(removed, ["blue", "trumpet"]);
 
     // #7
     list = new List("angel", "clown", "mandarin", "sturgeon");
     removed = list.splice(-2, 1);
 
-    expectToEqual(list, ["angel", "clown", "sturgeon"]);
-    expectToEqual(removed, ["mandarin"]);
+    expectListToBe(list, ["angel", "clown", "sturgeon"]);
+    expectListToBe(removed, ["mandarin"]);
 
     // #8
     list = new List("angel", "clown", "mandarin", "sturgeon");
     removed = list.splice(2, Infinity);
 
-    expectToEqual(list, ["angel", "clown"]);
-    expectToEqual(removed, ["mandarin", "sturgeon"]);
+    expectListToBe(list, ["angel", "clown"]);
+    expectListToBe(removed, ["mandarin", "sturgeon"]);
   });
 
   test("List.prototype.toSpliced()", () => {
@@ -963,49 +963,49 @@ describe("Testing List", () => {
     // #1
     let newList = list.toSpliced(2, 0, "drum");
 
-    expectToEqual(newList, ["angel", "clown", "drum", "mandarin", "sturgeon"]);
+    expectListToBe(newList, ["angel", "clown", "drum", "mandarin", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #2
     newList = list.toSpliced(2, 0, "drum", "guitar");
 
-    expectToEqual(newList, ["angel", "clown", "drum", "guitar", "mandarin", "sturgeon"]);
+    expectListToBe(newList, ["angel", "clown", "drum", "guitar", "mandarin", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #3
     newList = list.toSpliced(2, 1);
 
-    expectToEqual(newList, ["angel", "clown", "sturgeon"]);
+    expectListToBe(newList, ["angel", "clown", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #4
     newList = list.toSpliced(2, 1, "trumpet");
 
-    expectToEqual(newList, ["angel", "clown", "trumpet", "sturgeon"]);
+    expectListToBe(newList, ["angel", "clown", "trumpet", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #5
     newList = list.toSpliced(0, 2, "parrot", "anemone", "blue");
 
-    expectToEqual(newList, ["parrot", "anemone", "blue", "mandarin", "sturgeon"]);
+    expectListToBe(newList, ["parrot", "anemone", "blue", "mandarin", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #6
     newList = list.toSpliced(1, 2);
 
-    expectToEqual(newList, ["angel", "sturgeon"]);
+    expectListToBe(newList, ["angel", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #7
     newList = list.toSpliced(-2, 1);
 
-    expectToEqual(newList, ["angel", "clown", "sturgeon"]);
+    expectListToBe(newList, ["angel", "clown", "sturgeon"]);
     expect(newList).not.toBe(list);
 
     // #8
     newList = list.toSpliced(2, Infinity);
 
-    expectToEqual(newList, ["angel", "clown"]);
+    expectListToBe(newList, ["angel", "clown"]);
     expect(newList).not.toBe(list);
   });
 
@@ -1014,21 +1014,21 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 4, 5);
     let returnedList = list.copyWithin(0, 3);
 
-    expectToEqual(returnedList, [4, 5, 3, 4, 5]);
+    expectListToBe(returnedList, [4, 5, 3, 4, 5]);
     expect(returnedList).toBe(list);
 
     // #2
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.copyWithin(0, 3, 4);
 
-    expectToEqual(returnedList, [4, 2, 3, 4, 5]);
+    expectListToBe(returnedList, [4, 2, 3, 4, 5]);
     expect(returnedList).toBe(list);
 
     // #3
     list = new List(1, 2, 3, 4, 5);
     returnedList = list.copyWithin(-2, -3, -1);
 
-    expectToEqual(returnedList, [1, 2, 3, 3, 4]);
+    expectListToBe(returnedList, [1, 2, 3, 3, 4]);
     expect(returnedList).toBe(list);
   });
 
@@ -1037,14 +1037,14 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 4);
     let returnedList = list.reverse();
 
-    expectToEqual(returnedList, [4, 3, 2, 1]);
+    expectListToBe(returnedList, [4, 3, 2, 1]);
     expect(returnedList).toBe(list);
 
     // #2
     list = new List(3, 2, 4, 1, 5);
     returnedList = list.reverse();
 
-    expectToEqual(returnedList, [5, 1, 4, 2, 3]);
+    expectListToBe(returnedList, [5, 1, 4, 2, 3]);
     expect(returnedList).toBe(list);
   });
 
@@ -1053,14 +1053,14 @@ describe("Testing List", () => {
     let list = new List(1, 2, 3, 4);
     let newList = list.toReversed();
 
-    expectToEqual(newList, [4, 3, 2, 1]);
+    expectListToBe(newList, [4, 3, 2, 1]);
     expect(newList).not.toBe(list);
 
     // #2
     list = new List(3, 2, 4, 1, 5);
     newList = list.toReversed();
 
-    expectToEqual(newList, [5, 1, 4, 2, 3]);
+    expectListToBe(newList, [5, 1, 4, 2, 3]);
     expect(newList).not.toBe(list);
   });
 
@@ -1069,33 +1069,33 @@ describe("Testing List", () => {
     let list = new List<any>("Blue", "Humpback", "Beluga");
     let returnedList = list.sort();
 
-    expectToEqual(returnedList, ["Beluga", "Blue", "Humpback"]);
+    expectListToBe(returnedList, ["Beluga", "Blue", "Humpback"]);
     expect(returnedList).toBe(list);
 
     // #2
     returnedList = list.sort(Compare.strings());
 
-    expectToEqual(returnedList, ["Beluga", "Blue", "Humpback"]);
+    expectListToBe(returnedList, ["Beluga", "Blue", "Humpback"]);
     expect(returnedList).toBe(list);
 
     // #3
     list = new List(40, 1, 5, 200);
     returnedList = list.sort();
 
-    expectToEqual(returnedList, [1, 200, 40, 5]);
+    expectListToBe(returnedList, [1, 200, 40, 5]);
     expect(returnedList).toBe(list);
 
     // #4
     returnedList = list.sort(Compare.numbers());
 
-    expectToEqual(returnedList, [1, 5, 40, 200]);
+    expectListToBe(returnedList, [1, 5, 40, 200]);
     expect(returnedList).toBe(list);
 
     // #5
     list = new List("80", "9", "700");
     returnedList = list.sort();
 
-    expectToEqual(returnedList, ["700", "80", "9"]);
+    expectListToBe(returnedList, ["700", "80", "9"]);
     expect(returnedList).toBe(list);
   });
 
@@ -1104,33 +1104,33 @@ describe("Testing List", () => {
     let list = new List<any>("Blue", "Humpback", "Beluga");
     let newList = list.toSorted();
 
-    expectToEqual(newList, ["Beluga", "Blue", "Humpback"]);
+    expectListToBe(newList, ["Beluga", "Blue", "Humpback"]);
     expect(newList).not.toBe(list);
 
     // #2
     newList = list.toSorted(Compare.strings());
 
-    expectToEqual(newList, ["Beluga", "Blue", "Humpback"]);
+    expectListToBe(newList, ["Beluga", "Blue", "Humpback"]);
     expect(newList).not.toBe(list);
 
     // #3
     list = new List(40, 1, 5, 200);
     newList = list.toSorted();
 
-    expectToEqual(newList, [1, 200, 40, 5]);
+    expectListToBe(newList, [1, 200, 40, 5]);
     expect(newList).not.toBe(list);
 
     // #4
     newList = list.toSorted(Compare.numbers());
 
-    expectToEqual(newList, [1, 5, 40, 200]);
+    expectListToBe(newList, [1, 5, 40, 200]);
     expect(newList).not.toBe(list);
 
     // #5
     list = new List("80", "9", "700");
     newList = list.toSorted();
 
-    expectToEqual(newList, ["700", "80", "9"]);
+    expectListToBe(newList, ["700", "80", "9"]);
     expect(newList).not.toBe(list);
   });
 
@@ -1139,7 +1139,7 @@ describe("Testing List", () => {
     const list = new List(1, 2, 2, 6, 4, 1, 2, 3, 5, 6);
     const newList = list.distinct();
 
-    expectToEqual(newList, [1, 2, 6, 4, 3, 5]);
+    expectListToBe(newList, [1, 2, 6, 4, 3, 5]);
     expect(newList).not.toBe(list);
   });
 
@@ -1148,7 +1148,7 @@ describe("Testing List", () => {
     const list = new List({v: 1}, {v: 2}, {v: 2}, {v: 6}, {v: 4}, {v: 1}, {v: 2}, {v: 3}, {v: 5}, {v: 6});
     const newList = list.distinctBy(o => o.v);
 
-    expectToEqual(newList, [{v: 1}, {v: 2}, {v: 6}, {v: 4}, {v: 3}, {v: 5}]);
+    expectListToBe(newList, [{v: 1}, {v: 2}, {v: 6}, {v: 4}, {v: 3}, {v: 5}]);
     expect(newList).not.toBe(list);
   });
 
@@ -1187,31 +1187,31 @@ describe("Testing List", () => {
     const list = new List(1, 2, 3);
     const newList = list.clone();
 
-    expectToEqual(newList, [1, 2, 3]);
+    expectListToBe(newList, [1, 2, 3]);
     expect(newList).not.toBe(list);
   });
 
   test("List.from()", () => {
     // #1
-    expectToEqual(
+    expectListToBe(
       List.from([1, 2, 3]),
       [1, 2, 3]
     );
 
     // #2
-    expectToEqual(
+    expectListToBe(
       List.from("foo"),
       ["f", "o", "o"]
     );
 
     // #3
-    expectToEqual(
+    expectListToBe(
       List.from(new Set(["foo", "bar", "baz", "foo"])),
       ["foo", "bar", "baz"]
     );
 
     // #4
-    expectToEqual(
+    expectListToBe(
       List.from(new Map([[1, 2], [2, 4], [4, 8]])),
       [[1, 2], [2, 4], [4, 8]]
     );
@@ -1222,13 +1222,13 @@ describe("Testing List", () => {
       ["2", "b"],
     ]);
 
-    expectToEqual(
+    expectListToBe(
       List.from(map.values()),
       ["a", "b"]
     );
 
     // #6
-    expectToEqual(
+    expectListToBe(
       List.from(map.keys()),
       ["1", "2"]
     );
@@ -1240,13 +1240,13 @@ describe("Testing List", () => {
       return List.from(arguments);
     }
 
-    expectToEqual(
+    expectListToBe(
       func(1, 2, 3),
       [1, 2, 3]
     );
 
     // #8
-    expectToEqual(
+    expectListToBe(
       List.from([1, 2, 3], (x) => x + x),
       [2, 4, 6]
     );
@@ -1256,14 +1256,14 @@ describe("Testing List", () => {
     // #1
     const asyncIterable = (async function*() {
       for (let i = 0; i < 5; ++i) {
-        await new Promise((resolve) => setTimeout(resolve, 10 * i));
+        await new Promise((resolve) => global.setTimeout(resolve, 10 * i));
         yield i;
       }
     })();
 
     let list = await List.fromAsync<any>(asyncIterable);
 
-    expectToEqual(list, [0, 1, 2, 3, 4]);
+    expectListToBe(list, [0, 1, 2, 3, 4]);
 
     // #2
     list = await List.fromAsync(new Map([
@@ -1271,7 +1271,7 @@ describe("Testing List", () => {
       [3, 4]
     ]));
 
-    expectToEqual(list, [[1, 2], [3, 4]]);
+    expectListToBe(list, [[1, 2], [3, 4]]);
 
     // #3
     list = await List.fromAsync(new Set([
@@ -1280,7 +1280,7 @@ describe("Testing List", () => {
       Promise.resolve(3)
     ]));
 
-    expectToEqual(list, [1, 2, 3]);
+    expectListToBe(list, [1, 2, 3]);
 
     // #4
     list = await List.fromAsync({
@@ -1290,11 +1290,11 @@ describe("Testing List", () => {
       2: Promise.resolve(3),
     });
 
-    expectToEqual(list, [1, 2, 3]);
+    expectListToBe(list, [1, 2, 3]);
 
     // #5
     function delayedValue<T>(v: T): Promise<T> {
-      return new Promise((resolve) => setTimeout(() => resolve(v), 100));
+      return new Promise((resolve) => global.setTimeout(() => resolve(v), 100));
     }
 
     list = await List.fromAsync(
@@ -1302,18 +1302,18 @@ describe("Testing List", () => {
       (element) => delayedValue(element * 2)
     );
 
-    expectToEqual(list, [2, 4, 6]);
+    expectListToBe(list, [2, 4, 6]);
   });
 
   test("List.of()", () => {
     // #1
-    expectToEqual(List.of(), []);
+    expectListToBe(List.of(), []);
 
     // #2
-    expectToEqual(List.of(0), [0]);
+    expectListToBe(List.of(0), [0]);
 
     // #3
-    expectToEqual(List.of(1, 2, 3), [1, 2, 3]);
+    expectListToBe(List.of(1, 2, 3), [1, 2, 3]);
   });
 
   test("List.repeat()", () => {
@@ -1321,10 +1321,10 @@ describe("Testing List", () => {
     expect(() => List.repeat(0, -1)).toThrow(RangeError);
 
     // #2
-    expectToEqual(List.repeat(0, 0), []);
+    expectListToBe(List.repeat(0, 0), []);
 
     // #3
-    expectToEqual(List.repeat(0, 5), [0, 0, 0, 0, 0]);
+    expectListToBe(List.repeat(0, 5), [0, 0, 0, 0, 0]);
   });
 
 });

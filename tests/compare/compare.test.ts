@@ -1,8 +1,8 @@
-import { Order } from "../src/common";
-import { Compare } from "../src/compare";
+import { Order } from "../../src/common";
+import { Compare } from "../../src/compare";
 
 
-describe("Testing Compare", () => {
+describe("Compare", () => {
 
   test("Compare.asStrings()", () => {
     // #1

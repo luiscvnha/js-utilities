@@ -1,7 +1,56 @@
 import { mod, clamp, round } from "../../src/helpers";
 
 
-describe("Testing math helpers", () => {
+describe("helpers/math/", () => {
+
+  test("clamp", () => {
+    expect(clamp(-2, 0, 4)).toBe(0);
+    expect(clamp(-1, 0, 4)).toBe(0);
+    expect(clamp( 0, 0, 4)).toBe(0);
+    expect(clamp( 1, 0, 4)).toBe(1);
+    expect(clamp( 2, 0, 4)).toBe(2);
+    expect(clamp( 3, 0, 4)).toBe(3);
+    expect(clamp( 4, 0, 4)).toBe(4);
+    expect(clamp( 5, 0, 4)).toBe(4);
+    expect(clamp( 6, 0, 4)).toBe(4);
+
+    expect(clamp(1, 3, 3)).toBe(3);
+    expect(clamp(2, 3, 3)).toBe(3);
+    expect(clamp(3, 3, 3)).toBe(3);
+    expect(clamp(4, 3, 3)).toBe(3);
+    expect(clamp(5, 3, 3)).toBe(3);
+
+    expect(clamp(-Infinity,         1, Infinity)).toBe(        1);
+    expect(clamp(       -2,         1, Infinity)).toBe(        1);
+    expect(clamp(        0,         1, Infinity)).toBe(        1);
+    expect(clamp(        2,         1, Infinity)).toBe(        2);
+    expect(clamp( Infinity,         1, Infinity)).toBe( Infinity);
+    expect(clamp(-Infinity, -Infinity,        1)).toBe(-Infinity);
+    expect(clamp(       -2, -Infinity,        1)).toBe(       -2);
+    expect(clamp(        0, -Infinity,        1)).toBe(        0);
+    expect(clamp(        2, -Infinity,        1)).toBe(        1);
+    expect(clamp( Infinity, -Infinity,        1)).toBe(        1);
+    expect(clamp(-Infinity, -Infinity, Infinity)).toBe(-Infinity);
+    expect(clamp(       -2, -Infinity, Infinity)).toBe(       -2);
+    expect(clamp(        0, -Infinity, Infinity)).toBe(        0);
+    expect(clamp(        2, -Infinity, Infinity)).toBe(        2);
+    expect(clamp( Infinity, -Infinity, Infinity)).toBe( Infinity);
+
+    expect(() => clamp(      NaN, 10, 1)).toThrow(RangeError);
+    expect(() => clamp(-Infinity, 10, 1)).toThrow(RangeError);
+    expect(() => clamp(       -2, 10, 1)).toThrow(RangeError);
+    expect(() => clamp(        0, 10, 1)).toThrow(RangeError);
+    expect(() => clamp(        2, 10, 1)).toThrow(RangeError);
+    expect(() => clamp( Infinity, 10, 1)).toThrow(RangeError);
+
+    expect(clamp(NaN, NaN, NaN)).toBeNaN();
+    expect(clamp(  2, NaN, NaN)).toBeNaN();
+    expect(clamp(NaN,   0, NaN)).toBeNaN();
+    expect(clamp(NaN, NaN,   4)).toBeNaN();
+    expect(clamp(NaN,   0,   4)).toBeNaN();
+    expect(clamp(  2, NaN,   4)).toBeNaN();
+    expect(clamp(  2,   0, NaN)).toBeNaN();
+  });
 
   test("mod", () => {
     expect(mod(-6, 4)).toBe(2);
@@ -56,55 +105,6 @@ describe("Testing math helpers", () => {
     expect(mod(NaN, NaN)).toBeNaN();
     expect(mod(NaN,  12)).toBeNaN();
     expect(mod(  2, NaN)).toBeNaN();
-  });
-
-  test("clamp", () => {
-    expect(clamp(-2, 0, 4)).toBe(0);
-    expect(clamp(-1, 0, 4)).toBe(0);
-    expect(clamp( 0, 0, 4)).toBe(0);
-    expect(clamp( 1, 0, 4)).toBe(1);
-    expect(clamp( 2, 0, 4)).toBe(2);
-    expect(clamp( 3, 0, 4)).toBe(3);
-    expect(clamp( 4, 0, 4)).toBe(4);
-    expect(clamp( 5, 0, 4)).toBe(4);
-    expect(clamp( 6, 0, 4)).toBe(4);
-
-    expect(clamp(1, 3, 3)).toBe(3);
-    expect(clamp(2, 3, 3)).toBe(3);
-    expect(clamp(3, 3, 3)).toBe(3);
-    expect(clamp(4, 3, 3)).toBe(3);
-    expect(clamp(5, 3, 3)).toBe(3);
-
-    expect(clamp(-Infinity,         1, Infinity)).toBe(        1);
-    expect(clamp(       -2,         1, Infinity)).toBe(        1);
-    expect(clamp(        0,         1, Infinity)).toBe(        1);
-    expect(clamp(        2,         1, Infinity)).toBe(        2);
-    expect(clamp( Infinity,         1, Infinity)).toBe( Infinity);
-    expect(clamp(-Infinity, -Infinity,        1)).toBe(-Infinity);
-    expect(clamp(       -2, -Infinity,        1)).toBe(       -2);
-    expect(clamp(        0, -Infinity,        1)).toBe(        0);
-    expect(clamp(        2, -Infinity,        1)).toBe(        1);
-    expect(clamp( Infinity, -Infinity,        1)).toBe(        1);
-    expect(clamp(-Infinity, -Infinity, Infinity)).toBe(-Infinity);
-    expect(clamp(       -2, -Infinity, Infinity)).toBe(       -2);
-    expect(clamp(        0, -Infinity, Infinity)).toBe(        0);
-    expect(clamp(        2, -Infinity, Infinity)).toBe(        2);
-    expect(clamp( Infinity, -Infinity, Infinity)).toBe( Infinity);
-
-    expect(() => clamp(      NaN, 10, 1)).toThrow(RangeError);
-    expect(() => clamp(-Infinity, 10, 1)).toThrow(RangeError);
-    expect(() => clamp(       -2, 10, 1)).toThrow(RangeError);
-    expect(() => clamp(        0, 10, 1)).toThrow(RangeError);
-    expect(() => clamp(        2, 10, 1)).toThrow(RangeError);
-    expect(() => clamp( Infinity, 10, 1)).toThrow(RangeError);
-
-    expect(clamp(NaN, NaN, NaN)).toBeNaN();
-    expect(clamp(  2, NaN, NaN)).toBeNaN();
-    expect(clamp(NaN,   0, NaN)).toBeNaN();
-    expect(clamp(NaN, NaN,   4)).toBeNaN();
-    expect(clamp(NaN,   0,   4)).toBeNaN();
-    expect(clamp(  2, NaN,   4)).toBeNaN();
-    expect(clamp(  2,   0, NaN)).toBeNaN();
   });
 
   test("round", () => {

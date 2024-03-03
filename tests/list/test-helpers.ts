@@ -1,4 +1,4 @@
-import { typeOf } from "../../src/helpers";
+import { PlainObject, isPlainObject } from "../../src/common";
 import { List } from "../../src/list";
 
 
@@ -6,7 +6,7 @@ function isListOrArray(x: any): x is List<any> | any[] {
   return x instanceof List || Array.isArray(x);
 }
 
-function expectListOrArrayToEqual(actual: List<any> | any[], expected: List<any> | any[]): void {
+function expectListOrArrayToBe(actual: List<any> | any[], expected: List<any> | any[]): void {
   expect(actual.length).toBe(expected.length);
 
   const actualKeys = Object.keys(actual);
@@ -21,7 +21,7 @@ function expectListOrArrayToEqual(actual: List<any> | any[], expected: List<any>
 
     expect(actualKey).toBe(expectedKey);
 
-    expectToEqual(actual[Number(actualKey)], expected[Number(expectedKey)]);
+    expectListToBe(actual[Number(actualKey)], expected[Number(expectedKey)]);
   }
 }
 
@@ -30,21 +30,17 @@ function isMap(x: any): x is Map<any, any> {
   return x instanceof Map;
 }
 
-function expectMapToEqual(actual: Map<any, any>, expected: Map<any, any>): void {
+function expectMapToBe(actual: Map<any, any>, expected: Map<any, any>): void {
   expect(actual.size).toBe(expected.size);
 
   for (const key of actual.keys()) {
     expect(expected.has(key)).toBe(true);
-    expectToEqual(actual.get(key), expected.get(key));
+    expectListToBe(actual.get(key), expected.get(key));
   }
 }
 
 
-function isPlainObject(x: any): x is Record<any, any> {
-  return typeOf(x) === "object";
-}
-
-function expectPlainObjectToEqual(actual: Record<any, any>, expected: Record<any, any>): void {
+function expectPlainObjectToBe(actual: PlainObject, expected: PlainObject): void {
   const actualKeys = Object.keys(actual);
   const expectedKeys = Object.keys(expected);
 
@@ -52,24 +48,24 @@ function expectPlainObjectToEqual(actual: Record<any, any>, expected: Record<any
 
   for (const key of actualKeys) {
     expect(expectedKeys).toContain(key);
-    expectToEqual(actual[key], expected[key]);
+    expectListToBe(actual[key], expected[key]);
   }
 }
 
 
-export function expectToEqual(actual: any, expected: any): void {
+export function expectListToBe(actual: any, expected: any): void {
   if (Object.is(actual, expected)) {
     return;
   }
 
   if (isListOrArray(actual) && isListOrArray(expected)) {
-    expectListOrArrayToEqual(actual, expected);
+    expectListOrArrayToBe(actual, expected);
   }
   else if (isMap(actual) && isMap(expected)) {
-    expectMapToEqual(actual, expected);
+    expectMapToBe(actual, expected);
   }
   else if (isPlainObject(actual) && isPlainObject(expected)) {
-    expectPlainObjectToEqual(actual, expected);
+    expectPlainObjectToBe(actual, expected);
   }
   else {
     throw new Error("Arguments' types are incompatible");

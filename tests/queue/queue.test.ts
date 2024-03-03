@@ -1,7 +1,7 @@
-import { Queue } from "../src/queue";
+import { Queue } from "../../src/queue";
 
 
-describe("Testing Queue", () => {
+describe("Queue", () => {
 
   test("Queue() constructor", () => {
     // #1
