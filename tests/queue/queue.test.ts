@@ -187,6 +187,7 @@ describe("Queue", () => {
     const queue = new Queue(1, 2, 3);
     const newQueue = queue.clone();
 
+    expect(newQueue.size).toBe(3);
     expect(newQueue.toArray()).toEqual([1, 2, 3]);
     expect(newQueue).not.toBe(queue);
   });

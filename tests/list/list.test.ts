@@ -551,13 +551,13 @@ describe("List", () => {
     const list = new List(4, 2, 6);
 
     // #1
-    expect(list.some(v => v < 4)).toBe(true);
+    expect(list.any(v => v < 4)).toBe(true);
 
     // #2
-    expect(list.some(v => v === 2)).toBe(true);
+    expect(list.any(v => v === 2)).toBe(true);
 
     // #3
-    expect(list.some(v => v > 6)).toBe(false);
+    expect(list.any(v => v > 6)).toBe(false);
   });
 
   test("List.prototype.find()", () => {
@@ -1303,17 +1303,6 @@ describe("List", () => {
     );
 
     expectListToBe(list, [2, 4, 6]);
-  });
-
-  test("List.of()", () => {
-    // #1
-    expectListToBe(List.of(), []);
-
-    // #2
-    expectListToBe(List.of(0), [0]);
-
-    // #3
-    expectListToBe(List.of(1, 2, 3), [1, 2, 3]);
   });
 
   test("List.repeat()", () => {

@@ -187,6 +187,7 @@ describe("Stack", () => {
     const stack = new Stack(1, 2, 3);
     const newStack = stack.clone();
 
+    expect(newStack.size).toBe(3);
     expect(newStack.toArray()).toEqual([1, 2, 3]);
     expect(newStack).not.toBe(stack);
   });
