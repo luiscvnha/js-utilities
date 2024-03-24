@@ -1,7 +1,7 @@
 // https://stackoverflow.com/a/19722641
 export function round(value: number, digits: number = 0): number {
   if (digits < 0 || digits > 100) {
-    throw new RangeError("decimals must be a number between 0 and 100");
+    throw new RangeError("digits must be a number between 0 and 100");
   }
 
   if (Number.isNaN(value) || Number.isNaN(digits)) {
