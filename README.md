@@ -2,8 +2,6 @@
 
 JavaScript/TypeScript utilities written in TypeScript.
 
-[Docs](https://github.com/luiscvnha/js-utilities/wiki)
-
 [Changelog](https://github.com/luiscvnha/js-utilities/releases)
 
 ## Install
