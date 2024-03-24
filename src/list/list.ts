@@ -349,7 +349,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     return true;
   }
 
-  public some(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): boolean {
+  public any(predicate: (value: T, index: number, list: List<T>) => boolean, thisArg?: unknown): boolean {
     if (thisArg !== undefined) {
       predicate = predicate.bind(thisArg);
     }
