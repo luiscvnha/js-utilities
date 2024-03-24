@@ -921,10 +921,6 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     return r;
   }
 
-  public static of<T>(...items: T[]): List<T> {
-    return new List<T>(...items);
-  }
-
   public static repeat<T>(value: T, count: number): List<T> {
     if (count < 0) {
       throw new RangeError("Invalid count value");
