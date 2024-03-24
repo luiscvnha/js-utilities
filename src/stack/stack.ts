@@ -6,26 +6,37 @@ import { join } from "../__internal__/join";
 import { stringify } from "../__internal__/stringify";
 
 
+const className = "Stack";
+
 export class Stack<T = unknown> implements Iterable<T> {
+  // Non-enumerable properties
+
+  declare private _size: number;
+
+  declare public readonly size: number;
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Enumerable properties
+
   [index: number]: T;
 
-  private _size: number;
-  public get size(): number {
-    return this._size;
-  }
-
-  public get [Symbol.toStringTag](): string {
-    return "Stack";
-  }
+  // Static properties
 
   private static readonly separator = ", ";
 
 
   public constructor(...items: T[]) {
-    Object.defineProperty(this, "_size", {
-      configurable: false,
-      enumerable: false,
-      writable: true
+    Object.defineProperties(this, {
+      _size: {
+        writable: true,
+      },
+      size: {
+        get: () => this._size,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
     });
 
     const itemsLength = items.length;

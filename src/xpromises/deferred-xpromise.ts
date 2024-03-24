@@ -4,14 +4,17 @@ import type { PromiseResolver } from "./types/promise-resolver";
 import { XPromise } from "./xpromise";
 
 
+const className = "DeferredXPromise";
+
 export class DeferredXPromise<T = void> extends XPromise<T> {
-  private _resolve: PromiseResolver<T> | undefined;
-  private _reject: PromiseRejector | undefined;
+  // Non-enumerable properties
 
+  declare private _resolve: PromiseResolver<T> | undefined;
+  declare private _reject: PromiseRejector | undefined;
 
-  public get [Symbol.toStringTag](): string {
-    return "DeferredXPromise";
-  }
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Static properties
 
   public static get [Symbol.species]() {
     return XPromise;
@@ -27,8 +30,20 @@ export class DeferredXPromise<T = void> extends XPromise<T> {
       rejectTmp = reject;
     });
 
-    this._resolve = resolveTmp;
-    this._reject = rejectTmp;
+    Object.defineProperties(this, {
+      _resolve: {
+        writable: true,
+        value: resolveTmp,
+      },
+      _reject: {
+        writable: true,
+        value: rejectTmp,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
+    });
   }
 
 

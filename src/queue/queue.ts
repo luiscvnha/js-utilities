@@ -6,19 +6,22 @@ import { join } from "../__internal__/join";
 import { stringify } from "../__internal__/stringify";
 
 
+const className = "Queue";
+
 export class Queue<T = unknown> implements Iterable<T> {
+  // Non-enumerable properties
+
+  declare private _head: number;
+  declare private _tail: number;
+
+  declare public readonly size: number;
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Enumerable properties
+
   [index: number]: T;
 
-  private _head: number;
-  private _tail: number;
-
-  public get size(): number {
-    return this._tail - this._head;
-  }
-
-  public get [Symbol.toStringTag](): string {
-    return "Queue";
-  }
+  // Static properties
 
   private static readonly separator = ", ";
   private static readonly shiftThreshold = 8;
@@ -26,15 +29,18 @@ export class Queue<T = unknown> implements Iterable<T> {
 
   public constructor(...items: T[]) {
     Object.defineProperties(this, {
-      "_head": {
-        configurable: false,
-        enumerable: false,
-        writable: true
+      _head: {
+        writable: true,
       },
-      "_tail": {
-        configurable: false,
-        enumerable: false,
-        writable: true
+      _tail: {
+        writable: true,
+      },
+      size: {
+        get: () => this._tail - this._head,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
       }
     });
 

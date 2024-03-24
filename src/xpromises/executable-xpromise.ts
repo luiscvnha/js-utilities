@@ -4,15 +4,18 @@ import type { PromiseExecutor } from "./types/promise-executor";
 import { XPromise } from "./xpromise";
 
 
+const className = "ExecutableXPromise";
+
 export class ExecutableXPromise<T = void> extends XPromise<T> {
-  private _resolve: PromiseResolver<T> | undefined;
-  private _reject: PromiseRejector | undefined;
-  private _executed: boolean;
+  // Non-enumerable properties
 
+  declare private _resolve: PromiseResolver<T> | undefined;
+  declare private _reject: PromiseRejector | undefined;
+  declare private _executed: boolean;
 
-  public get [Symbol.toStringTag](): string {
-    return "ExecutableXPromise";
-  }
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Static properties
 
   public static get [Symbol.species]() {
     return XPromise;
@@ -28,10 +31,24 @@ export class ExecutableXPromise<T = void> extends XPromise<T> {
       rejectTmp = reject;
     });
 
-    this._resolve = resolveTmp;
-    this._reject = rejectTmp;
-
-    this._executed = false;
+    Object.defineProperties(this, {
+      _resolve: {
+        writable: true,
+        value: resolveTmp,
+      },
+      _reject: {
+        writable: true,
+        value: rejectTmp,
+      },
+      _executed: {
+        writable: true,
+        value: false,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
+    });
   }
 
 

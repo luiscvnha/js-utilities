@@ -11,13 +11,47 @@ import type { IXPromise } from "./types/ixpromise";
 import { PromiseState } from "./types/promise-state";
 
 
+const className = "XPromise";
+
 export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
+  // Non-enumerable properties
+
   declare private _state: PromiseState;
   declare private _result: T | PromiseRejectionReason;
 
+  declare public readonly [Symbol.toStringTag]: string;
 
-  public get [Symbol.toStringTag](): string {
-    return "XPromise";
+  // Enumerable properties
+
+  public get state(): PromiseState {
+    return this._state;
+  }
+
+  public get isPending(): boolean {
+    return this._state === PromiseState.Pending;
+  }
+
+  public get isFulfilled(): boolean {
+    return this._state === PromiseState.Fulfilled;
+  }
+
+  public get isRejected(): boolean {
+    return this._state === PromiseState.Rejected;
+  }
+
+  public get isSettled(): boolean {
+    return this._state === PromiseState.Fulfilled || this._state === PromiseState.Rejected;
+  }
+
+  public get result(): XPromiseSettledResult<T> {
+    if (!this.isSettled) {
+      throw new Error(`Cannot get result of unsettled ${this[Symbol.toStringTag]}`);
+    }
+
+    return {
+      state: this._state,
+      [this.isFulfilled ? "value" : "reason"]: this._result,
+    } as XPromiseSettledResult<T>;
   }
 
 
@@ -62,39 +96,13 @@ export class XPromise<T = void> extends Promise<T> implements IXPromise<T> {
         writable: true,
         value: result,
       },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
     });
   }
 
-  public get state(): PromiseState {
-    return this._state;
-  }
-
-  public get isPending(): boolean {
-    return this._state === PromiseState.Pending;
-  }
-
-  public get isFulfilled(): boolean {
-    return this._state === PromiseState.Fulfilled;
-  }
-
-  public get isRejected(): boolean {
-    return this._state === PromiseState.Rejected;
-  }
-
-  public get isSettled(): boolean {
-    return this._state === PromiseState.Fulfilled || this._state === PromiseState.Rejected;
-  }
-
-  public get result(): XPromiseSettledResult<T> {
-    if (!this.isSettled) {
-      throw new Error(`Cannot get result of unsettled ${this[Symbol.toStringTag]}`);
-    }
-
-    return {
-      state: this._state,
-      [this.isFulfilled ? "value" : "reason"]: this._result,
-    } as XPromiseSettledResult<T>;
-  }
 
   public override then<TResult1 = T, TResult2 = never>(onfulfilled?: Nullable<PromiseOnFulfilled<T, TResult1>>, onrejected?: Nullable<PromiseOnRejected<TResult2>>): IXPromise<TResult1 | TResult2> {
     return super.then(onfulfilled, onrejected) as IXPromise<TResult1 | TResult2>;

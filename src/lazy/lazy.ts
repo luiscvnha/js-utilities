@@ -4,10 +4,18 @@ import { stringify } from "../__internal__/stringify";
 import { localeStringify } from "../__internal__/locale-stringify";
 
 
+const className = "Lazy";
+
 export class Lazy<T = unknown> {
-  private _factory: (() => T) | undefined;
-  private _hasValue: boolean;
-  private _value!: T;
+  // Non-enumerable properties
+
+  declare private _factory: (() => T) | undefined;
+  declare private _hasValue: boolean;
+  declare private _value: T;
+
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Enumerable properties
 
   public get hasValue(): boolean {
     return this._hasValue;
@@ -22,14 +30,25 @@ export class Lazy<T = unknown> {
     return this._value;
   }
 
-  public get [Symbol.toStringTag](): string {
-    return "Lazy";
-  }
-
 
   public constructor(factory: () => T) {
-    this._factory = factory;
-    this._hasValue = false;
+    Object.defineProperties(this, {
+      _factory: {
+        writable: true,
+        value: factory,
+      },
+      _hasValue: {
+        writable: true,
+        value: false,
+      },
+      _value: {
+        writable: true,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
+    });
   }
 
 

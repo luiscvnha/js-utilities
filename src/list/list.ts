@@ -19,26 +19,37 @@ type FlattenList<Type, Depth extends number> = [
 ][Depth extends -1 ? 0 : 1];
 
 
+const className = "List";
+
 export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
+  // Non-enumerable properties
+
+  declare private _length: number;
+
+  declare public readonly length: number;
+  declare public readonly [Symbol.toStringTag]: string;
+
+  // Enumerable properties
+
   [index: number]: T;
 
-  private _length: number;
-  public get length(): number {
-    return this._length;
-  }
-
-  public get [Symbol.toStringTag](): string {
-    return "List";
-  }
+  // Static properties
 
   private static readonly separator = ", ";
 
 
   public constructor(...items: T[]) {
-    Object.defineProperty(this, "_length", {
-      configurable: false,
-      enumerable: false,
-      writable: true
+    Object.defineProperties(this, {
+      _length: {
+        writable: true,
+      },
+      length: {
+        get: () => this._length,
+      },
+      [Symbol.toStringTag]: {
+        configurable: true,
+        value: className,
+      }
     });
 
     const itemsLength = items.length;
@@ -282,7 +293,9 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     return undefined;
   }
 
-  public [Symbol.iterator]: () => IterableIterator<T> = this.values;
+  public [Symbol.iterator](): IterableIterator<T> {
+    return this.values();
+  }
 
   public keys(): IterableIterator<number> {
     let index = 0;
