@@ -1,4 +1,4 @@
-import { deepFreeze } from "../helpers/objects/deep-freeze";
+import { createNamespaceObject } from "../__internal__/create-namespace-object";
 import {
   asStrings,
   strings,
@@ -8,7 +8,7 @@ import {
 } from "./compare";
 
 export * from "./types/comparer";
-export const Compare = deepFreeze({
+export const Compare = createNamespaceObject({
   asStrings,
   strings,
   numbers,

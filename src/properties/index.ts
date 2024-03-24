@@ -1,4 +1,4 @@
-import { deepFreeze } from "../helpers/objects/deep-freeze";
+import { createNamespaceObject } from "../__internal__/create-namespace-object";
 import {
   getOwnEnumerableNames,
   getOwnEnumerableSymbols,
@@ -38,7 +38,7 @@ import {
   has,
 } from "./properties";
 
-export const Properties = deepFreeze({
+export const Properties = createNamespaceObject({
   getOwnEnumerableNames,
   getOwnEnumerableSymbols,
   getOwnEnumerable,
