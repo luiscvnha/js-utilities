@@ -31,7 +31,8 @@
   ],
   "scripts": {
     "build": "npx webpack --config webpack.config.js",
-    "test": "npx jest --config jest.config.js"
+    "test": "npx jest --config jest.config.js",
+    "clean": "rm -rf node_modules dist"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
