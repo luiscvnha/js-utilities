@@ -121,10 +121,26 @@ export class Stack<T = unknown> implements Iterable<T> {
   }
 
   public toArray(): T[] {
-    return [...this];
+    const r = [];
+
+    const size = this._size;
+    for (let i = 0; i < size; ++i) {
+      r[i] = this[i];
+    }
+
+    return r;
   }
 
   public clone(): Stack<T> {
-    return new Stack<T>(...this);
+    const r = new Stack<T>();
+
+    const size = this._size;
+    for (let i = 0; i < size; ++i) {
+      r[i] = this[i];
+    }
+
+    r._size = size;
+
+    return r;
   }
 }

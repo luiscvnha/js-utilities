@@ -135,11 +135,30 @@ export class Queue<T = unknown> implements Iterable<T> {
   }
 
   public toArray(): T[] {
-    return [...this];
+    const r = [];
+
+    let j = 0;
+    const tail = this._tail;
+    for (let i = this._head; i < tail; ++i, ++j) {
+      r[j] = this[i];
+    }
+
+    return r;
   }
 
   public clone(): Queue<T> {
-    return new Queue<T>(...this);
+    const r = new Queue<T>();
+
+    let j = 0;
+    const tail = this._tail;
+    for (let i = this._head; i < tail; ++i, ++j) {
+      r[j] = this[i];
+    }
+
+    r._head = 0;
+    r._tail = j;
+
+    return r;
   }
 
 

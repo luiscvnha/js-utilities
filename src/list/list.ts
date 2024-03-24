@@ -341,7 +341,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     for (let i = 0; i < length; ++i) {
-      if (predicate(this[i], i, this) !== true) {
+      if (!predicate(this[i], i, this)) {
         return false;
       }
     }
@@ -356,7 +356,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     for (let i = 0; i < length; ++i) {
-      if (predicate(this[i], i, this) === true) {
+      if (predicate(this[i], i, this)) {
         return true;
       }
     }
@@ -373,7 +373,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     for (let i = 0; i < length; ++i) {
-      if (predicate(this[i], i, this) === true) {
+      if (predicate(this[i], i, this)) {
         return this[i];
       }
     }
@@ -389,7 +389,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     }
 
     for (let i = this._length - 1; i >= 0; --i) {
-      if (predicate(this[i], i, this) === true) {
+      if (predicate(this[i], i, this)) {
         return this[i];
       }
     }
@@ -404,7 +404,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     for (let i = 0; i < length; ++i) {
-      if (predicate(this[i], i, this) === true) {
+      if (predicate(this[i], i, this)) {
         return i;
       }
     }
@@ -418,7 +418,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     }
 
     for (let i = this._length - 1; i >= 0; --i) {
-      if (predicate(this[i], i, this) === true) {
+      if (predicate(this[i], i, this)) {
         return i;
       }
     }
@@ -511,7 +511,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const length = this._length;
     for (let j = 0; j < length; ++j) {
-      if (predicate(this[j], j, this) === true) {
+      if (predicate(this[j], j, this)) {
         r[i++] = this[j];
       }
     }
@@ -529,12 +529,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     }
 
     const length = this._length;
-    let i = 0;
-    for (; i < length; ++i) {
+    for (let i = 0; i < length; ++i) {
       r[i] = callbackFn(this[i], i, this);
     }
 
-    r._length = i;
+    r._length = length;
 
     return r;
   }
@@ -724,10 +723,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
   public reverse(): this {
     const length = this._length;
+    const lastIndex = length - 1;
     const mid = Math.trunc(length / 2);
 
     for (let i = 0; i < mid; ++i) {
-      this.swap(i, length - 1 - i);
+      this.swap(i, lastIndex - i);
     }
 
     return this;
@@ -735,10 +735,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
   public toReversed(): List<T> {
     const length = this._length;
+    const lastIndex = length - 1;
     const r = new List<T>();
 
-    for (let i = length - 1; i >= 0; --i) {
-      r[length - 1 - i] = this[i];
+    for (let i = lastIndex; i >= 0; --i) {
+      r[lastIndex - i] = this[i];
     }
 
     r._length = this._length;
@@ -747,7 +748,10 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
   }
 
   public sort(compareFn?: Comparer<T> | undefined): this {
-    compareFn ??= compareAsStrings();
+    if (compareFn === undefined) {
+      compareFn = compareAsStrings();
+    }
+
     this.quickSort(0, this._length - 1, compareFn);
     return this;
   }
@@ -797,7 +801,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
   }
 
   public join(separator?: string | undefined): string {
-    return join(this, separator ?? List.separator, stringify);
+    return join(this, separator !== undefined ? separator : List.separator, stringify);
   }
 
   public toString(): string {
@@ -809,11 +813,27 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
   }
 
   public toArray(): T[] {
-    return [...this];
+    const r = [];
+
+    const length = this._length;
+    for (let i = 0; i < length; ++i) {
+      r[i] = this[i];
+    }
+
+    return r;
   }
 
   public clone(): List<T> {
-    return new List<T>(...this);
+    const r = new List<T>();
+
+    const length = this._length;
+    for (let i = 0; i < length; ++i) {
+      r[i] = this[i];
+    }
+
+    r._length = length;
+
+    return r;
   }
 
 
@@ -835,7 +855,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
       let i = 0;
       for (
         let iteratorResult = iterator.next();
-        iteratorResult.done !== true;
+        !iteratorResult.done;
         iteratorResult = iterator.next(), ++i
       ) {
         r[i] = mapFn !== undefined ? mapFn(iteratorResult.value, i) : iteratorResult.value;
@@ -845,12 +865,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     }
     else if (isArrayLike(iterable)) {
       const length = iterable.length;
-      let i = 0;
-      for (; i < length; ++i) {
+      for (let i = 0; i < length; ++i) {
         r[i] = mapFn !== undefined ? mapFn(iterable[i], i) : iterable[i];
       }
 
-      r._length = i;
+      r._length = length;
     }
     else {
       throw new TypeError("Invalid iterable value");
@@ -877,7 +896,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
       let i = 0;
       for (
         let iteratorResult = await iterator.next();
-        iteratorResult.done !== true;
+        !iteratorResult.done;
         iteratorResult = await iterator.next(), ++i
       ) {
         const value = await iteratorResult.value;
@@ -888,13 +907,12 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     }
     else if (isArrayLike(iterable)) {
       const length = iterable.length;
-      let i = 0;
-      for (; i < length; ++i) {
+      for (let i = 0; i < length; ++i) {
         const value = await iterable[i];
         r[i] = mapFn !== undefined ? await mapFn(value, i) : value;
       }
 
-      r._length = i;
+      r._length = length;
     }
     else {
       throw new TypeError("Invalid iterable value");
@@ -914,12 +932,11 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
 
     const r = new List<T>();
 
-    let i = 0;
-    for (; i < count; ++i) {
+    for (let i = 0; i < count; ++i) {
       r[i] = value;
     }
 
-    r._length = i;
+    r._length = count;
 
     return r;
   }
@@ -988,7 +1005,7 @@ export class List<T = unknown> implements Iterable<T>, ArrayLike<T> {
     let count = end - start;
     let inc = 1;
 
-    if (start < target && target < start + count) {
+    if (start < target && target < end) {
       inc = -1;
       start += count - 1;
       target += count - 1;
